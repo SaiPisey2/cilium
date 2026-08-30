@@ -9,11 +9,11 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/compute/armcompute/v8 v8.3.0
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/network/armnetwork/v11 v11.0.0
 	github.com/aliyun/alibaba-cloud-sdk-go v1.63.107
-	github.com/aws/aws-sdk-go-v2 v1.43.6
-	github.com/aws/aws-sdk-go-v2/config v1.32.37
-	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.37
-	github.com/aws/aws-sdk-go-v2/service/ec2 v1.321.3
-	github.com/aws/smithy-go v1.27.8
+	github.com/aws/aws-sdk-go-v2 v1.43.7
+	github.com/aws/aws-sdk-go-v2/config v1.32.38
+	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.38
+	github.com/aws/aws-sdk-go-v2/service/ec2 v1.322.0
+	github.com/aws/smithy-go v1.27.9
 	github.com/blang/semver/v4 v4.0.0
 	github.com/cespare/xxhash/v2 v2.3.0
 	github.com/cilium/charts v0.0.0-20260818100304-fca0bb45200a
@@ -22,14 +22,14 @@ require (
 	github.com/cilium/ebpf v0.22.0
 	github.com/cilium/endpointslice-controller v0.0.0-20250410163339-ffb33e27879c
 	github.com/cilium/fake v0.7.0
-	github.com/cilium/hive v1.0.4
+	github.com/cilium/hive v1.0.5
 	github.com/cilium/lumberjack/v2 v2.4.2
 	github.com/cilium/proxy v0.0.0-20260701124752-9c14fdc485a1
 	github.com/cilium/statedb v0.9.0
 	github.com/cilium/stream v0.0.1
 	github.com/cilium/workerpool v1.4.0
 	github.com/cloudflare/cfssl v1.6.5
-	github.com/containerd/nri v0.12.1
+	github.com/containerd/nri v0.12.2
 	github.com/containernetworking/cni v1.3.0
 	github.com/coreos/go-iptables v0.8.0
 	github.com/coreos/go-systemd/v22 v22.7.0
@@ -42,17 +42,17 @@ require (
 	github.com/go-logr/logr v1.4.4
 	github.com/go-openapi/errors v0.22.8
 	github.com/go-openapi/loads v0.25.1
-	github.com/go-openapi/runtime v0.33.0
-	github.com/go-openapi/spec v0.22.9
+	github.com/go-openapi/runtime v0.33.1
+	github.com/go-openapi/spec v0.22.10
 	github.com/go-openapi/strfmt v0.27.0
-	github.com/go-openapi/swag v0.28.0
-	github.com/go-openapi/swag/cmdutils v0.28.0
-	github.com/go-openapi/swag/conv v0.28.0
-	github.com/go-openapi/swag/jsonutils v0.28.0
-	github.com/go-openapi/swag/netutils v0.28.0
-	github.com/go-openapi/swag/typeutils v0.28.0
-	github.com/go-openapi/validate v0.26.3
-	github.com/google/cel-go v0.31.0
+	github.com/go-openapi/swag v0.29.1
+	github.com/go-openapi/swag/cmdutils v0.29.1
+	github.com/go-openapi/swag/conv v0.29.1
+	github.com/go-openapi/swag/jsonutils v0.29.1
+	github.com/go-openapi/swag/netutils v0.29.1
+	github.com/go-openapi/swag/typeutils v0.29.1
+	github.com/go-openapi/validate v0.26.4
+	github.com/google/cel-go v0.32.0
 	github.com/google/go-cmp v0.7.0
 	github.com/google/go-github/v90 v90.0.0
 	github.com/google/go-licenses/v2 v2.0.1
@@ -90,7 +90,7 @@ require (
 	github.com/prometheus/procfs v0.21.1
 	github.com/russross/blackfriday/v2 v2.1.0
 	github.com/sasha-s/go-deadlock v0.3.9
-	github.com/sirupsen/logrus v1.10.0
+	github.com/sirupsen/logrus v1.10.1
 	github.com/spf13/afero v1.15.0
 	github.com/spf13/cast v1.10.0
 	github.com/spf13/cobra v1.10.2
@@ -111,9 +111,9 @@ require (
 	go.uber.org/goleak v1.3.0
 	go.uber.org/zap v1.28.0
 	go.yaml.in/yaml/v3 v3.0.5
-	go4.org/netipx v0.0.0-20231129151722-fdeea329fbba
+	go4.org/netipx v0.0.0-20260823151212-3075585bcbeb
 	golang.org/x/crypto v0.55.0
-	golang.org/x/exp v0.0.0-20260813180055-c1d0aacb2297
+	golang.org/x/exp v0.0.0-20260824195058-e88cd73687aa
 	golang.org/x/mod v0.40.0
 	golang.org/x/net v0.58.0
 	golang.org/x/sync v0.22.0
@@ -124,20 +124,20 @@ require (
 	golang.org/x/tools v0.49.0
 	golang.zx2c4.com/wireguard/wgctrl v0.0.0-20241231184526-a9ab2273dd10
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260810153831-ec0a7760b754
-	google.golang.org/grpc v1.83.0
+	google.golang.org/grpc v1.83.1
 	google.golang.org/protobuf v1.36.12
 	helm.sh/helm/v4 v4.2.4
-	k8s.io/api v0.36.3
-	k8s.io/apiextensions-apiserver v0.36.3
-	k8s.io/apimachinery v0.36.3
-	k8s.io/cli-runtime v0.36.3
-	k8s.io/client-go v0.36.3
-	k8s.io/component-base v0.36.3
-	k8s.io/dynamic-resource-allocation v0.36.3
-	k8s.io/endpointslice v0.36.3
+	k8s.io/api v0.36.4
+	k8s.io/apiextensions-apiserver v0.36.4
+	k8s.io/apimachinery v0.36.4
+	k8s.io/cli-runtime v0.36.4
+	k8s.io/client-go v0.36.4
+	k8s.io/component-base v0.36.4
+	k8s.io/dynamic-resource-allocation v0.36.4
+	k8s.io/endpointslice v0.36.4
 	k8s.io/klog/v2 v2.140.0
-	k8s.io/kubectl v0.36.3
-	k8s.io/metrics v0.36.3
+	k8s.io/kubectl v0.36.4
+	k8s.io/metrics v0.36.4
 	k8s.io/utils v0.0.0-20260707023825-cf1189d6abe3
 	sigs.k8s.io/controller-runtime v0.24.1
 	sigs.k8s.io/gateway-api v1.6.1
@@ -315,7 +315,7 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 	k8s.io/apiserver v0.36.3 // indirect
-	k8s.io/code-generator v0.36.3 // indirect
+	k8s.io/code-generator v0.36.4 // indirect
 	k8s.io/gengo/v2 v2.0.0-20260408192533-25e2208e0dc3 // indirect
 	k8s.io/kube-openapi v0.0.0-20260501160325-927ab1f70cd6 // indirect
 	k8s.io/kubelet v0.36.3 // indirect
