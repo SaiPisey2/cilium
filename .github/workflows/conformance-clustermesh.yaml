@@ -509,6 +509,7 @@ jobs:
               }'"
           fi
 
+          echo ${FLAGS}
           echo flags=${FLAGS} >> $GITHUB_OUTPUT
 
       - name: Install Cilium CLI
@@ -726,6 +727,9 @@ jobs:
 
           echo "No node ID found drops: $total_drops"
           echo "total_drops=$total_drops" >> $GITHUB_OUTPUT
+
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
 
       - name: Run connectivity test (${{ join(matrix.*, ', ') }})
         id: run-tests
