@@ -245,6 +245,8 @@ static __always_inline bool dsr_is_too_big(struct __ctx_buff *ctx __maybe_unused
 					   __u16 expanded_len __maybe_unused)
 {
 #ifdef ENABLE_DSR_ICMP_ERRORS
+	if (ctx_gso_size(ctx))
+		return false;
 	if (expanded_len > CONFIG(device_mtu))
 		return true;
 #endif
