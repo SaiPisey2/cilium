@@ -6,136 +6,237 @@
 package models
 
 import (
-	"context"
-	stderrors "errors"
-	"strconv"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // BgpRoute Single BGP route retrieved from the RIB of underlying router
 // Deprecated: This will be removed in the future.
+// 
 //
 // swagger:model BgpRoute
-type BgpRoute struct {
+      type BgpRoute struct {
+  
+  
+    // IP address specifying a BGP neighbor if the source table type is adj-rib-in or adj-rib-out
+Neighbor string `json:"neighbor,omitempty"`
 
-	// IP address specifying a BGP neighbor if the source table type is adj-rib-in or adj-rib-out
-	Neighbor string `json:"neighbor,omitempty"`
+  
+    // List of routing paths leading towards the prefix
+Paths []*BgpPath `json:"paths"`
 
-	// List of routing paths leading towards the prefix
-	Paths []*BgpPath `json:"paths"`
+  
+    // IP prefix of the route
+Prefix string `json:"prefix,omitempty"`
 
-	// IP prefix of the route
-	Prefix string `json:"prefix,omitempty"`
+  
+    // Autonomous System Number (ASN) identifying a BGP virtual router instance
+RouterAsn int64 `json:"router-asn,omitempty"`
 
-	// Autonomous System Number (ASN) identifying a BGP virtual router instance
-	RouterAsn int64 `json:"router-asn,omitempty"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this bgp route
 func (m *BgpRoute) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validatePaths(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+  
+    
+      if err := m.validatePaths(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+  
+    
+  
+  
+  
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+  
+    
+      
+      
+      
+      
+
+      
 func (m *BgpRoute) validatePaths(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Paths) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Paths) { // not required
+    return nil
+  }
+        
+    
+  
+  
+  
+  
+  
+  
+  
+      for i := 0; i < len(m.Paths); i++ {
+          if typeutils.IsZero(m.Paths[i]) { // not required
+            continue
+          }
+        
+    
+      if m.Paths[i] != nil {
+      if err := m.Paths[i].Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("paths"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("paths"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.Paths); i++ {
-		if typeutils.IsZero(m.Paths[i]) { // not required
-			continue
-		}
+        return err
+      }
+    }
 
-		if m.Paths[i] != nil {
-			if err := m.Paths[i].Validate(formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("paths" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("paths" + "." + strconv.Itoa(i))
-				}
 
-				return err
-			}
-		}
+      }
 
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+  
+    
+  
+  
 
+  
+
+    
 // ContextValidate validate this bgp route based on the context it is used
 func (m *BgpRoute) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
+  var res []error
+   
+  
 
-	if err := m.contextValidatePaths(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+    
+  
+     
+      if err := m.contextValidatePaths(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+  
+    
+  
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+
+  
+    
+  
+    
 func (m *BgpRoute) contextValidatePaths(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+  
+      for i := 0; i < len(m.Paths); i++ {
+        
+    
+  
+      if m.Paths[i] != nil {
+      
+      if typeutils.IsZero(m.Paths[i]) { // not required
+        return nil
+      }
+      
+      if err := m.Paths[i].ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("paths"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("paths"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.Paths); i++ {
+        return err
+      }
+    }
 
-		if m.Paths[i] != nil {
 
-			if typeutils.IsZero(m.Paths[i]) { // not required
-				return nil
-			}
 
-			if err := m.Paths[i].ContextValidate(ctx, formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("paths" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("paths" + "." + strconv.Itoa(i))
-				}
+      }
 
-				return err
-			}
-		}
 
-	}
 
-	return nil
+  return nil
 }
+    
+  
+    
+  
+    
+   
+   
 
+  
 // MarshalBinary interface implementation
 func (m *BgpRoute) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *BgpRoute) UnmarshalBinary(b []byte) error {
-	var res BgpRoute
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res BgpRoute
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

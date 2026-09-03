@@ -6,128 +6,201 @@
 package models
 
 import (
-	"context"
-	stderrors "errors"
-	"strconv"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // ClusterMeshStatus Status of ClusterMesh
-//
+// 
 // +k8s:deepcopy-gen=true
 //
 // swagger:model ClusterMeshStatus
-type ClusterMeshStatus struct {
+      type ClusterMeshStatus struct {
+  
+  
+    // List of remote clusters
+Clusters []*RemoteCluster `json:"clusters"`
 
-	// List of remote clusters
-	Clusters []*RemoteCluster `json:"clusters"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this cluster mesh status
 func (m *ClusterMeshStatus) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateClusters(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+      if err := m.validateClusters(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  
+  
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+      
+      
+      
+      
+
+      
 func (m *ClusterMeshStatus) validateClusters(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Clusters) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Clusters) { // not required
+    return nil
+  }
+        
+    
+  
+  
+  
+  
+  
+  
+  
+      for i := 0; i < len(m.Clusters); i++ {
+          if typeutils.IsZero(m.Clusters[i]) { // not required
+            continue
+          }
+        
+    
+      if m.Clusters[i] != nil {
+      if err := m.Clusters[i].Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("clusters"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("clusters"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.Clusters); i++ {
-		if typeutils.IsZero(m.Clusters[i]) { // not required
-			continue
-		}
+        return err
+      }
+    }
 
-		if m.Clusters[i] != nil {
-			if err := m.Clusters[i].Validate(formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("clusters" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("clusters" + "." + strconv.Itoa(i))
-				}
 
-				return err
-			}
-		}
+      }
 
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+  
 
+  
+
+    
 // ContextValidate validate this cluster mesh status based on the context it is used
 func (m *ClusterMeshStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
+  var res []error
+   
+  
 
-	if err := m.contextValidateClusters(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+     
+      if err := m.contextValidateClusters(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+
+  
+    
 func (m *ClusterMeshStatus) contextValidateClusters(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+  
+      for i := 0; i < len(m.Clusters); i++ {
+        
+    
+  
+      if m.Clusters[i] != nil {
+      
+      if typeutils.IsZero(m.Clusters[i]) { // not required
+        return nil
+      }
+      
+      if err := m.Clusters[i].ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("clusters"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("clusters"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.Clusters); i++ {
+        return err
+      }
+    }
 
-		if m.Clusters[i] != nil {
 
-			if typeutils.IsZero(m.Clusters[i]) { // not required
-				return nil
-			}
 
-			if err := m.Clusters[i].ContextValidate(ctx, formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("clusters" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("clusters" + "." + strconv.Itoa(i))
-				}
+      }
 
-				return err
-			}
-		}
 
-	}
 
-	return nil
+  return nil
 }
+    
+   
+   
 
+  
 // MarshalBinary interface implementation
 func (m *ClusterMeshStatus) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *ClusterMeshStatus) UnmarshalBinary(b []byte) error {
-	var res ClusterMeshStatus
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res ClusterMeshStatus
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

@@ -6,51 +6,67 @@
 package models
 
 import (
-	"context"
+  stderrors "errors"
 
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
+	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // BgpRoutePolicyPrefix Matches a CIDR prefix in a BGP route policy
 //
 // swagger:model BgpRoutePolicyPrefix
-type BgpRoutePolicyPrefix struct {
+      type BgpRoutePolicyPrefix struct {
+  
+  
+    // CIDR prefix to match with
+Cidr string `json:"cidr,omitempty"`
 
-	// CIDR prefix to match with
-	Cidr string `json:"cidr,omitempty"`
+  
+    // Maximal prefix length that will match if it falls under CIDR
+PrefixLenMax int64 `json:"prefix-len-max,omitempty"`
 
-	// Maximal prefix length that will match if it falls under CIDR
-	PrefixLenMax int64 `json:"prefix-len-max,omitempty"`
+  
+    // Minimal prefix length that will match if it falls under CIDR
+PrefixLenMin int64 `json:"prefix-len-min,omitempty"`
 
-	// Minimal prefix length that will match if it falls under CIDR
-	PrefixLenMin int64 `json:"prefix-len-min,omitempty"`
+  
+  
 }
-
+  
 // Validate validates this bgp route policy prefix
 func (m *BgpRoutePolicyPrefix) Validate(formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
-// ContextValidate validates this bgp route policy prefix based on context it is used
+// ContextValidate validates this bgp route policy prefix based on context it is used 
 func (m *BgpRoutePolicyPrefix) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
+  
 // MarshalBinary interface implementation
 func (m *BgpRoutePolicyPrefix) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *BgpRoutePolicyPrefix) UnmarshalBinary(b []byte) error {
-	var res BgpRoutePolicyPrefix
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res BgpRoutePolicyPrefix
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

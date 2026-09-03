@@ -6,121 +6,186 @@
 package models
 
 import (
-	"context"
-	"encoding/json"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
 	"github.com/go-openapi/validate"
 )
 
 // Port Layer 4 port / protocol pair
-//
+// 
 // +deepequal-gen=true
 //
 // swagger:model Port
-type Port struct {
+      type Port struct {
+  
+  
+    // Optional layer 4 port name
+Name string `json:"name,omitempty"`
 
-	// Optional layer 4 port name
-	Name string `json:"name,omitempty"`
+  
+    // Layer 4 port number
+Port uint16 `json:"port,omitempty"`
 
-	// Layer 4 port number
-	Port uint16 `json:"port,omitempty"`
+  
+    // Layer 4 protocol
+// Enum: ["TCP","UDP","SCTP","ICMP","ICMPV6","ANY"]
+Protocol string `json:"protocol,omitempty"`
 
-	// Layer 4 protocol
-	// Enum: ["TCP","UDP","SCTP","ICMP","ICMPV6","ANY"]
-	Protocol string `json:"protocol,omitempty"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this port
 func (m *Port) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateProtocol(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+  
+    
+  
+    
+      if err := m.validateProtocol(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  
+  
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+  
+    
+  
+    
+      
 var portTypeProtocolPropEnum []any
 
 func init() {
-	var res []string
-	if err := json.Unmarshal([]byte(`["TCP","UDP","SCTP","ICMP","ICMPV6","ANY"]`), &res); err != nil {
-		panic(err)
-	}
-	for _, v := range res {
-		portTypeProtocolPropEnum = append(portTypeProtocolPropEnum, v)
-	}
+  var res []string
+  if err := json.Unmarshal([]byte(`["TCP","UDP","SCTP","ICMP","ICMPV6","ANY"]`), &res); err != nil {
+    panic(err)
+  }
+  for _, v := range res {
+    portTypeProtocolPropEnum = append(portTypeProtocolPropEnum, v)
+  }
 }
 
+        
+          
+          
 const (
-
-	// PortProtocolTCP captures enum value "TCP"
+          
+  // PortProtocolTCP captures enum value "TCP"
 	PortProtocolTCP string = "TCP"
-
-	// PortProtocolUDP captures enum value "UDP"
+          
+  // PortProtocolUDP captures enum value "UDP"
 	PortProtocolUDP string = "UDP"
-
-	// PortProtocolSCTP captures enum value "SCTP"
+          
+  // PortProtocolSCTP captures enum value "SCTP"
 	PortProtocolSCTP string = "SCTP"
-
-	// PortProtocolICMP captures enum value "ICMP"
+          
+  // PortProtocolICMP captures enum value "ICMP"
 	PortProtocolICMP string = "ICMP"
-
-	// PortProtocolICMPV6 captures enum value "ICMPV6"
+          
+  // PortProtocolICMPV6 captures enum value "ICMPV6"
 	PortProtocolICMPV6 string = "ICMPV6"
-
-	// PortProtocolANY captures enum value "ANY"
+          
+  // PortProtocolANY captures enum value "ANY"
 	PortProtocolANY string = "ANY"
+          
 )
+        
 
 // prop value enum
 func (m *Port) validateProtocolEnum(path, location string, value string) error {
-	if err := validate.EnumCase(path, location, value, portTypeProtocolPropEnum, true); err != nil {
-		return err
-	}
-	return nil
+  if err := validate.EnumCase(path, location, value, portTypeProtocolPropEnum, true); err != nil {
+    return err
+  }
+  return nil
 }
+      
+      
+      
+      
 
+      
 func (m *Port) validateProtocol(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Protocol) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Protocol) { // not required
+    return nil
+  }
+        
+      
+  
+  
+  
+  
+  
+  
+  
+  
+  // value enum
+  if err := m.validateProtocolEnum("protocol", "body", m.Protocol); err != nil {
+    return err
+  }
+  
 
-	// value enum
-	if err := m.validateProtocolEnum("protocol", "body", m.Protocol); err != nil {
-		return err
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+  
 
-// ContextValidate validates this port based on context it is used
+  
+
+// ContextValidate validates this port based on context it is used 
 func (m *Port) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
+  
 // MarshalBinary interface implementation
 func (m *Port) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *Port) UnmarshalBinary(b []byte) error {
-	var res Port
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res Port
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

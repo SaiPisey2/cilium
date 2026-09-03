@@ -6,48 +6,63 @@
 package models
 
 import (
-	"context"
+  stderrors "errors"
 
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
+	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // BgpRoutePolicyNexthopAction BGP nexthop action
 //
 // swagger:model BgpRoutePolicyNexthopAction
-type BgpRoutePolicyNexthopAction struct {
+      type BgpRoutePolicyNexthopAction struct {
+  
+  
+    // Set nexthop to the IP address of itself
+Self bool `json:"self,omitempty"`
 
-	// Set nexthop to the IP address of itself
-	Self bool `json:"self,omitempty"`
+  
+    // Don't change nexthop
+Unchanged bool `json:"unchanged,omitempty"`
 
-	// Don't change nexthop
-	Unchanged bool `json:"unchanged,omitempty"`
+  
+  
 }
-
+  
 // Validate validates this bgp route policy nexthop action
 func (m *BgpRoutePolicyNexthopAction) Validate(formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
-// ContextValidate validates this bgp route policy nexthop action based on context it is used
+// ContextValidate validates this bgp route policy nexthop action based on context it is used 
 func (m *BgpRoutePolicyNexthopAction) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
+  
 // MarshalBinary interface implementation
 func (m *BgpRoutePolicyNexthopAction) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *BgpRoutePolicyNexthopAction) UnmarshalBinary(b []byte) error {
-	var res BgpRoutePolicyNexthopAction
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res BgpRoutePolicyNexthopAction
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

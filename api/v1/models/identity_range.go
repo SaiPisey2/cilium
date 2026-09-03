@@ -6,48 +6,63 @@
 package models
 
 import (
-	"context"
+  stderrors "errors"
 
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
+	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // IdentityRange Status of identity range of the cluster
 //
 // swagger:model IdentityRange
-type IdentityRange struct {
+      type IdentityRange struct {
+  
+  
+    // Maximum identity of the cluster
+MaxIdentity int64 `json:"max-identity,omitempty"`
 
-	// Maximum identity of the cluster
-	MaxIdentity int64 `json:"max-identity,omitempty"`
+  
+    // Minimum identity of the cluster
+MinIdentity int64 `json:"min-identity,omitempty"`
 
-	// Minimum identity of the cluster
-	MinIdentity int64 `json:"min-identity,omitempty"`
+  
+  
 }
-
+  
 // Validate validates this identity range
 func (m *IdentityRange) Validate(formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
-// ContextValidate validates this identity range based on context it is used
+// ContextValidate validates this identity range based on context it is used 
 func (m *IdentityRange) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
+  
 // MarshalBinary interface implementation
 func (m *IdentityRange) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *IdentityRange) UnmarshalBinary(b []byte) error {
-	var res IdentityRange
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res IdentityRange
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

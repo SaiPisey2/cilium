@@ -6,247 +6,375 @@
 package models
 
 import (
-	"context"
-	stderrors "errors"
-	"strconv"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // EndpointPolicyStatus Policy information of an endpoint
 //
 // swagger:model EndpointPolicyStatus
-type EndpointPolicyStatus struct {
+      type EndpointPolicyStatus struct {
+  
+  
+    // The policy revision currently enforced in the proxy for this endpoint
+ProxyPolicyRevision int64 `json:"proxy-policy-revision,omitempty"`
 
-	// The policy revision currently enforced in the proxy for this endpoint
-	ProxyPolicyRevision int64 `json:"proxy-policy-revision,omitempty"`
+  
+    // Statistics of the proxy redirects configured for this endpoint
+ProxyStatistics []*ProxyStatistics `json:"proxy-statistics"`
 
-	// Statistics of the proxy redirects configured for this endpoint
-	ProxyStatistics []*ProxyStatistics `json:"proxy-statistics"`
+  
+    // The policy in the datapath for this endpoint
+Realized *EndpointPolicy `json:"realized,omitempty"`
 
-	// The policy in the datapath for this endpoint
-	Realized *EndpointPolicy `json:"realized,omitempty"`
+  
+    // The policy that should apply to this endpoint
+Spec *EndpointPolicy `json:"spec,omitempty"`
 
-	// The policy that should apply to this endpoint
-	Spec *EndpointPolicy `json:"spec,omitempty"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this endpoint policy status
 func (m *EndpointPolicyStatus) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateProxyStatistics(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+  
+    
+      if err := m.validateProxyStatistics(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+      if err := m.validateRealized(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+      if err := m.validateSpec(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  
+  
 
-	if err := m.validateRealized(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateSpec(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+  
+    
+      
+      
+      
+      
+
+      
 func (m *EndpointPolicyStatus) validateProxyStatistics(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.ProxyStatistics) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.ProxyStatistics) { // not required
+    return nil
+  }
+        
+    
+  
+  
+  
+  
+  
+  
+  
+      for i := 0; i < len(m.ProxyStatistics); i++ {
+          if typeutils.IsZero(m.ProxyStatistics[i]) { // not required
+            continue
+          }
+        
+    
+      if m.ProxyStatistics[i] != nil {
+      if err := m.ProxyStatistics[i].Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("proxy-statistics"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("proxy-statistics"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.ProxyStatistics); i++ {
-		if typeutils.IsZero(m.ProxyStatistics[i]) { // not required
-			continue
-		}
+        return err
+      }
+    }
 
-		if m.ProxyStatistics[i] != nil {
-			if err := m.ProxyStatistics[i].Validate(formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("proxy-statistics" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("proxy-statistics" + "." + strconv.Itoa(i))
-				}
 
-				return err
-			}
-		}
+      }
 
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+      
+      
+      
+      
 
+      
 func (m *EndpointPolicyStatus) validateRealized(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Realized) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Realized) { // not required
+    return nil
+  }
+        
+    
+      if m.Realized != nil {
+      if err := m.Realized.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("realized")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("realized")
+        }
 
-	if m.Realized != nil {
-		if err := m.Realized.Validate(formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("realized")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("realized")
-			}
+        return err
+      }
+    }
 
-			return err
-		}
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+      
+      
+      
+      
 
+      
 func (m *EndpointPolicyStatus) validateSpec(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Spec) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Spec) { // not required
+    return nil
+  }
+        
+    
+      if m.Spec != nil {
+      if err := m.Spec.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("spec")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("spec")
+        }
 
-	if m.Spec != nil {
-		if err := m.Spec.Validate(formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("spec")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("spec")
-			}
+        return err
+      }
+    }
 
-			return err
-		}
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+  
 
+  
+
+    
 // ContextValidate validate this endpoint policy status based on the context it is used
 func (m *EndpointPolicyStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
+  var res []error
+   
+  
 
-	if err := m.contextValidateProxyStatistics(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
-	if err := m.contextValidateRealized(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateSpec(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+    
+  
+     
+      if err := m.contextValidateProxyStatistics(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+     
+      if err := m.contextValidateRealized(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+     
+      if err := m.contextValidateSpec(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+
+  
+    
+  
+    
 func (m *EndpointPolicyStatus) contextValidateProxyStatistics(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+  
+      for i := 0; i < len(m.ProxyStatistics); i++ {
+        
+    
+  
+      if m.ProxyStatistics[i] != nil {
+      
+      if typeutils.IsZero(m.ProxyStatistics[i]) { // not required
+        return nil
+      }
+      
+      if err := m.ProxyStatistics[i].ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("proxy-statistics"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("proxy-statistics"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.ProxyStatistics); i++ {
+        return err
+      }
+    }
 
-		if m.ProxyStatistics[i] != nil {
 
-			if typeutils.IsZero(m.ProxyStatistics[i]) { // not required
-				return nil
-			}
 
-			if err := m.ProxyStatistics[i].ContextValidate(ctx, formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("proxy-statistics" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("proxy-statistics" + "." + strconv.Itoa(i))
-				}
+      }
 
-				return err
-			}
-		}
 
-	}
 
-	return nil
+  return nil
 }
-
+    
+  
+    
 func (m *EndpointPolicyStatus) contextValidateRealized(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+      if m.Realized != nil {
+      
+      if typeutils.IsZero(m.Realized) { // not required
+        return nil
+      }
+      
+      if err := m.Realized.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("realized")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("realized")
+        }
 
-	if m.Realized != nil {
+        return err
+      }
+    }
 
-		if typeutils.IsZero(m.Realized) { // not required
-			return nil
-		}
 
-		if err := m.Realized.ContextValidate(ctx, formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("realized")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("realized")
-			}
 
-			return err
-		}
-	}
-
-	return nil
+  return nil
 }
-
+    
+  
+    
 func (m *EndpointPolicyStatus) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+      if m.Spec != nil {
+      
+      if typeutils.IsZero(m.Spec) { // not required
+        return nil
+      }
+      
+      if err := m.Spec.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("spec")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("spec")
+        }
 
-	if m.Spec != nil {
+        return err
+      }
+    }
 
-		if typeutils.IsZero(m.Spec) { // not required
-			return nil
-		}
 
-		if err := m.Spec.ContextValidate(ctx, formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("spec")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("spec")
-			}
 
-			return err
-		}
-	}
-
-	return nil
+  return nil
 }
+    
+   
+   
 
+  
 // MarshalBinary interface implementation
 func (m *EndpointPolicyStatus) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *EndpointPolicyStatus) UnmarshalBinary(b []byte) error {
-	var res EndpointPolicyStatus
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res EndpointPolicyStatus
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

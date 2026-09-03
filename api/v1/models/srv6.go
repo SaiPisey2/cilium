@@ -6,12 +6,16 @@
 package models
 
 import (
-	"context"
-	"encoding/json"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
 	"github.com/go-openapi/validate"
 )
@@ -19,91 +23,147 @@ import (
 // Srv6 Status of the SRv6
 //
 // swagger:model Srv6
-type Srv6 struct {
+      type Srv6 struct {
+  
+  
+    // enabled
+Enabled bool `json:"enabled,omitempty"`
 
-	// enabled
-	Enabled bool `json:"enabled,omitempty"`
+  
+    // srv6 encap mode
+// Enum: ["SRH","Reduced"]
+Srv6EncapMode string `json:"srv6EncapMode,omitempty"`
 
-	// srv6 encap mode
-	// Enum: ["SRH","Reduced"]
-	Srv6EncapMode string `json:"srv6EncapMode,omitempty"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this srv6
 func (m *Srv6) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateSrv6EncapMode(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+  
+    
+      if err := m.validateSrv6EncapMode(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  
+  
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+  
+    
+      
 var srv6TypeSrv6EncapModePropEnum []any
 
 func init() {
-	var res []string
-	if err := json.Unmarshal([]byte(`["SRH","Reduced"]`), &res); err != nil {
-		panic(err)
-	}
-	for _, v := range res {
-		srv6TypeSrv6EncapModePropEnum = append(srv6TypeSrv6EncapModePropEnum, v)
-	}
+  var res []string
+  if err := json.Unmarshal([]byte(`["SRH","Reduced"]`), &res); err != nil {
+    panic(err)
+  }
+  for _, v := range res {
+    srv6TypeSrv6EncapModePropEnum = append(srv6TypeSrv6EncapModePropEnum, v)
+  }
 }
 
+        
+          
+          
 const (
-
-	// Srv6Srv6EncapModeSRH captures enum value "SRH"
+          
+  // Srv6Srv6EncapModeSRH captures enum value "SRH"
 	Srv6Srv6EncapModeSRH string = "SRH"
-
-	// Srv6Srv6EncapModeReduced captures enum value "Reduced"
+          
+  // Srv6Srv6EncapModeReduced captures enum value "Reduced"
 	Srv6Srv6EncapModeReduced string = "Reduced"
+          
 )
+        
 
 // prop value enum
 func (m *Srv6) validateSrv6EncapModeEnum(path, location string, value string) error {
-	if err := validate.EnumCase(path, location, value, srv6TypeSrv6EncapModePropEnum, true); err != nil {
-		return err
-	}
-	return nil
+  if err := validate.EnumCase(path, location, value, srv6TypeSrv6EncapModePropEnum, true); err != nil {
+    return err
+  }
+  return nil
 }
+      
+      
+      
+      
 
+      
 func (m *Srv6) validateSrv6EncapMode(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Srv6EncapMode) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Srv6EncapMode) { // not required
+    return nil
+  }
+        
+      
+  
+  
+  
+  
+  
+  
+  
+  
+  // value enum
+  if err := m.validateSrv6EncapModeEnum("srv6EncapMode", "body", m.Srv6EncapMode); err != nil {
+    return err
+  }
+  
 
-	// value enum
-	if err := m.validateSrv6EncapModeEnum("srv6EncapMode", "body", m.Srv6EncapMode); err != nil {
-		return err
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+  
 
-// ContextValidate validates this srv6 based on context it is used
+  
+
+// ContextValidate validates this srv6 based on context it is used 
 func (m *Srv6) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
+  
 // MarshalBinary interface implementation
 func (m *Srv6) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *Srv6) UnmarshalBinary(b []byte) error {
-	var res Srv6
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res Srv6
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

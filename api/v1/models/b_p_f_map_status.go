@@ -6,131 +6,214 @@
 package models
 
 import (
-	"context"
-	stderrors "errors"
-	"strconv"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // BPFMapStatus BPF map status
-//
+// 
 // +k8s:deepcopy-gen=true
+// 
 //
 // swagger:model BPFMapStatus
-type BPFMapStatus struct {
+      type BPFMapStatus struct {
+  
+  
+    // Ratio of total system memory to use for dynamic sizing of BPF maps
+DynamicSizeRatio float64 `json:"dynamic-size-ratio,omitempty"`
 
-	// Ratio of total system memory to use for dynamic sizing of BPF maps
-	DynamicSizeRatio float64 `json:"dynamic-size-ratio,omitempty"`
+  
+    // BPF maps
+Maps []*BPFMapProperties `json:"maps"`
 
-	// BPF maps
-	Maps []*BPFMapProperties `json:"maps"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this b p f map status
 func (m *BPFMapStatus) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateMaps(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+  
+    
+      if err := m.validateMaps(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  
+  
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+  
+    
+      
+      
+      
+      
+
+      
 func (m *BPFMapStatus) validateMaps(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Maps) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Maps) { // not required
+    return nil
+  }
+        
+    
+  
+  
+  
+  
+  
+  
+  
+      for i := 0; i < len(m.Maps); i++ {
+          if typeutils.IsZero(m.Maps[i]) { // not required
+            continue
+          }
+        
+    
+      if m.Maps[i] != nil {
+      if err := m.Maps[i].Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("maps"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("maps"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.Maps); i++ {
-		if typeutils.IsZero(m.Maps[i]) { // not required
-			continue
-		}
+        return err
+      }
+    }
 
-		if m.Maps[i] != nil {
-			if err := m.Maps[i].Validate(formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("maps" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("maps" + "." + strconv.Itoa(i))
-				}
 
-				return err
-			}
-		}
+      }
 
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+  
 
+  
+
+    
 // ContextValidate validate this b p f map status based on the context it is used
 func (m *BPFMapStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
+  var res []error
+   
+  
 
-	if err := m.contextValidateMaps(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+    
+  
+     
+      if err := m.contextValidateMaps(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+
+  
+    
+  
+    
 func (m *BPFMapStatus) contextValidateMaps(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+  
+      for i := 0; i < len(m.Maps); i++ {
+        
+    
+  
+      if m.Maps[i] != nil {
+      
+      if typeutils.IsZero(m.Maps[i]) { // not required
+        return nil
+      }
+      
+      if err := m.Maps[i].ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("maps"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("maps"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.Maps); i++ {
+        return err
+      }
+    }
 
-		if m.Maps[i] != nil {
 
-			if typeutils.IsZero(m.Maps[i]) { // not required
-				return nil
-			}
 
-			if err := m.Maps[i].ContextValidate(ctx, formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("maps" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("maps" + "." + strconv.Itoa(i))
-				}
+      }
 
-				return err
-			}
-		}
 
-	}
 
-	return nil
+  return nil
 }
+    
+   
+   
 
+  
 // MarshalBinary interface implementation
 func (m *BPFMapStatus) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *BPFMapStatus) UnmarshalBinary(b []byte) error {
-	var res BPFMapStatus
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res BPFMapStatus
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

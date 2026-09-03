@@ -6,83 +6,158 @@
 package models
 
 import (
-	"context"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
+	"github.com/go-openapi/swag/typeutils"
 	"github.com/go-openapi/validate"
 )
 
 // NodeID Node ID with associated node IP addresses
 //
 // swagger:model NodeID
-type NodeID struct {
+      type NodeID struct {
+  
+  
+    // ID allocated by the agent for the node
+// Required: true
+ID *int64 `json:"id"`
 
-	// ID allocated by the agent for the node
-	// Required: true
-	ID *int64 `json:"id"`
+  
+    // IP addresses of the node associated with the ID in the agent
+// Required: true
+Ips []string `json:"ips"`
 
-	// IP addresses of the node associated with the ID in the agent
-	// Required: true
-	Ips []string `json:"ips"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this node ID
 func (m *NodeID) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateID(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+      if err := m.validateID(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+      if err := m.validateIps(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  
+  
 
-	if err := m.validateIps(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+      
+      
+      
+      
+
+      
 func (m *NodeID) validateID(formats strfmt.Registry) error {
+        
+      
+  
+  if err := validate.Required("id", "body", m.ID); err != nil {
+    return err
+  }
+  
+  
+  
+  
+  
+  
+  
+  
 
-	if err := validate.Required("id", "body", m.ID); err != nil {
-		return err
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+      
+      
+      
+      
 
+      
 func (m *NodeID) validateIps(formats strfmt.Registry) error {
+        
+    
+  
+    if err := validate.Required("ips", "body", m.Ips); err != nil {
+      return err
+    }
+  
+  
+  
+  
+  
+  
+  
 
-	if err := validate.Required("ips", "body", m.Ips); err != nil {
-		return err
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+  
 
-// ContextValidate validates this node ID based on context it is used
+  
+
+// ContextValidate validates this node ID based on context it is used 
 func (m *NodeID) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
+  
 // MarshalBinary interface implementation
 func (m *NodeID) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *NodeID) UnmarshalBinary(b []byte) error {
-	var res NodeID
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res NodeID
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

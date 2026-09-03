@@ -6,177 +6,269 @@
 package models
 
 import (
-	"context"
-	stderrors "errors"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // TraceSelector Context describing a pair of source and destination identity
 //
 // swagger:model TraceSelector
-type TraceSelector struct {
+      type TraceSelector struct {
+  
+  
+    // from
+From *TraceFrom `json:"from,omitempty"`
 
-	// from
-	From *TraceFrom `json:"from,omitempty"`
+  
+    // to
+To *TraceTo `json:"to,omitempty"`
 
-	// to
-	To *TraceTo `json:"to,omitempty"`
+  
+    // Enable verbose tracing.
+// 
+Verbose bool `json:"verbose,omitempty"`
 
-	// Enable verbose tracing.
-	//
-	Verbose bool `json:"verbose,omitempty"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this trace selector
 func (m *TraceSelector) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateFrom(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+      if err := m.validateFrom(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+      if err := m.validateTo(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+  
+  
+  
 
-	if err := m.validateTo(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+      
+      
+      
+      
+
+      
 func (m *TraceSelector) validateFrom(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.From) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.From) { // not required
+    return nil
+  }
+        
+    
+      if m.From != nil {
+      if err := m.From.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("from")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("from")
+        }
 
-	if m.From != nil {
-		if err := m.From.Validate(formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("from")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("from")
-			}
+        return err
+      }
+    }
 
-			return err
-		}
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+      
+      
+      
+      
 
+      
 func (m *TraceSelector) validateTo(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.To) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.To) { // not required
+    return nil
+  }
+        
+    
+      if m.To != nil {
+      if err := m.To.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("to")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("to")
+        }
 
-	if m.To != nil {
-		if err := m.To.Validate(formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("to")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("to")
-			}
+        return err
+      }
+    }
 
-			return err
-		}
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+  
+  
 
+  
+
+    
 // ContextValidate validate this trace selector based on the context it is used
 func (m *TraceSelector) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
+  var res []error
+   
+  
 
-	if err := m.contextValidateFrom(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
-	if err := m.contextValidateTo(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+     
+      if err := m.contextValidateFrom(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+     
+      if err := m.contextValidateTo(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+  
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+
+  
+    
 func (m *TraceSelector) contextValidateFrom(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+      if m.From != nil {
+      
+      if typeutils.IsZero(m.From) { // not required
+        return nil
+      }
+      
+      if err := m.From.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("from")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("from")
+        }
 
-	if m.From != nil {
+        return err
+      }
+    }
 
-		if typeutils.IsZero(m.From) { // not required
-			return nil
-		}
 
-		if err := m.From.ContextValidate(ctx, formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("from")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("from")
-			}
 
-			return err
-		}
-	}
-
-	return nil
+  return nil
 }
-
+    
+  
+    
 func (m *TraceSelector) contextValidateTo(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+      if m.To != nil {
+      
+      if typeutils.IsZero(m.To) { // not required
+        return nil
+      }
+      
+      if err := m.To.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("to")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("to")
+        }
 
-	if m.To != nil {
+        return err
+      }
+    }
 
-		if typeutils.IsZero(m.To) { // not required
-			return nil
-		}
 
-		if err := m.To.ContextValidate(ctx, formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("to")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("to")
-			}
 
-			return err
-		}
-	}
-
-	return nil
+  return nil
 }
+    
+  
+    
+   
+   
 
+  
 // MarshalBinary interface implementation
 func (m *TraceSelector) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *TraceSelector) UnmarshalBinary(b []byte) error {
-	var res TraceSelector
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res TraceSelector
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

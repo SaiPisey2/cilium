@@ -6,173 +6,256 @@
 package models
 
 import (
-	"context"
-	stderrors "errors"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // LabelConfiguration Label configuration of an endpoint
 //
 // swagger:model LabelConfiguration
-type LabelConfiguration struct {
+      type LabelConfiguration struct {
+  
+  
+    // The user provided desired configuration
+Spec *LabelConfigurationSpec `json:"spec,omitempty"`
 
-	// The user provided desired configuration
-	Spec *LabelConfigurationSpec `json:"spec,omitempty"`
+  
+    // The current configuration
+Status *LabelConfigurationStatus `json:"status,omitempty"`
 
-	// The current configuration
-	Status *LabelConfigurationStatus `json:"status,omitempty"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this label configuration
 func (m *LabelConfiguration) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateSpec(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+      if err := m.validateSpec(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+      if err := m.validateStatus(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  
+  
 
-	if err := m.validateStatus(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+      
+      
+      
+      
+
+      
 func (m *LabelConfiguration) validateSpec(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Spec) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Spec) { // not required
+    return nil
+  }
+        
+    
+      if m.Spec != nil {
+      if err := m.Spec.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("spec")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("spec")
+        }
 
-	if m.Spec != nil {
-		if err := m.Spec.Validate(formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("spec")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("spec")
-			}
+        return err
+      }
+    }
 
-			return err
-		}
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+      
+      
+      
+      
 
+      
 func (m *LabelConfiguration) validateStatus(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Status) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Status) { // not required
+    return nil
+  }
+        
+    
+      if m.Status != nil {
+      if err := m.Status.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("status")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("status")
+        }
 
-	if m.Status != nil {
-		if err := m.Status.Validate(formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("status")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("status")
-			}
+        return err
+      }
+    }
 
-			return err
-		}
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+  
 
+  
+
+    
 // ContextValidate validate this label configuration based on the context it is used
 func (m *LabelConfiguration) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
+  var res []error
+   
+  
 
-	if err := m.contextValidateSpec(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
-	if err := m.contextValidateStatus(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+     
+      if err := m.contextValidateSpec(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+     
+      if err := m.contextValidateStatus(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+
+  
+    
 func (m *LabelConfiguration) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+      if m.Spec != nil {
+      
+      if typeutils.IsZero(m.Spec) { // not required
+        return nil
+      }
+      
+      if err := m.Spec.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("spec")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("spec")
+        }
 
-	if m.Spec != nil {
+        return err
+      }
+    }
 
-		if typeutils.IsZero(m.Spec) { // not required
-			return nil
-		}
 
-		if err := m.Spec.ContextValidate(ctx, formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("spec")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("spec")
-			}
 
-			return err
-		}
-	}
-
-	return nil
+  return nil
 }
-
+    
+  
+    
 func (m *LabelConfiguration) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+      if m.Status != nil {
+      
+      if typeutils.IsZero(m.Status) { // not required
+        return nil
+      }
+      
+      if err := m.Status.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("status")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("status")
+        }
 
-	if m.Status != nil {
+        return err
+      }
+    }
 
-		if typeutils.IsZero(m.Status) { // not required
-			return nil
-		}
 
-		if err := m.Status.ContextValidate(ctx, formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("status")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("status")
-			}
 
-			return err
-		}
-	}
-
-	return nil
+  return nil
 }
+    
+   
+   
 
+  
 // MarshalBinary interface implementation
 func (m *LabelConfiguration) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *LabelConfiguration) UnmarshalBinary(b []byte) error {
-	var res LabelConfiguration
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res LabelConfiguration
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

@@ -6,180 +6,277 @@
 package models
 
 import (
-	"context"
-	stderrors "errors"
-	"strconv"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // BgpRoutePolicyPrefixMatch Matches a CIDR prefix in a BGP route policy
 //
 // swagger:model BgpRoutePolicyPrefixMatch
-type BgpRoutePolicyPrefixMatch struct {
+      type BgpRoutePolicyPrefixMatch struct {
+  
+  
+    // Prefixes to match with
+Prefixes []*BgpRoutePolicyPrefix `json:"prefixes"`
 
-	// Prefixes to match with
-	Prefixes []*BgpRoutePolicyPrefix `json:"prefixes"`
+  
+    // Defines matching logic in case of multiple prefixes
+Type BgpRoutePolicyMatchType `json:"type,omitempty"`
 
-	// Defines matching logic in case of multiple prefixes
-	Type BgpRoutePolicyMatchType `json:"type,omitempty"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this bgp route policy prefix match
 func (m *BgpRoutePolicyPrefixMatch) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validatePrefixes(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+      if err := m.validatePrefixes(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+      if err := m.validateType(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  
+  
 
-	if err := m.validateType(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+      
+      
+      
+      
+
+      
 func (m *BgpRoutePolicyPrefixMatch) validatePrefixes(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Prefixes) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Prefixes) { // not required
+    return nil
+  }
+        
+    
+  
+  
+  
+  
+  
+  
+  
+      for i := 0; i < len(m.Prefixes); i++ {
+          if typeutils.IsZero(m.Prefixes[i]) { // not required
+            continue
+          }
+        
+    
+      if m.Prefixes[i] != nil {
+      if err := m.Prefixes[i].Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("prefixes"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("prefixes"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.Prefixes); i++ {
-		if typeutils.IsZero(m.Prefixes[i]) { // not required
-			continue
-		}
+        return err
+      }
+    }
 
-		if m.Prefixes[i] != nil {
-			if err := m.Prefixes[i].Validate(formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("prefixes" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("prefixes" + "." + strconv.Itoa(i))
-				}
 
-				return err
-			}
-		}
+      }
 
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+      
+      
+      
+      
 
+      
 func (m *BgpRoutePolicyPrefixMatch) validateType(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Type) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Type) { // not required
+    return nil
+  }
+        
+      
+      if err := m.Type.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("type")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("type")
+        }
 
-	if err := m.Type.Validate(formats); err != nil {
-		ve := new(errors.Validation)
-		if stderrors.As(err, &ve) {
-			return ve.ValidateName("type")
-		}
-		ce := new(errors.CompositeError)
-		if stderrors.As(err, &ce) {
-			return ce.ValidateName("type")
-		}
+        return err
+      }
 
-		return err
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+  
 
+  
+
+    
 // ContextValidate validate this bgp route policy prefix match based on the context it is used
 func (m *BgpRoutePolicyPrefixMatch) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
+  var res []error
+   
+  
 
-	if err := m.contextValidatePrefixes(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
-	if err := m.contextValidateType(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+     
+      if err := m.contextValidatePrefixes(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+     
+      if err := m.contextValidateType(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+
+  
+    
 func (m *BgpRoutePolicyPrefixMatch) contextValidatePrefixes(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+  
+      for i := 0; i < len(m.Prefixes); i++ {
+        
+    
+  
+      if m.Prefixes[i] != nil {
+      
+      if typeutils.IsZero(m.Prefixes[i]) { // not required
+        return nil
+      }
+      
+      if err := m.Prefixes[i].ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("prefixes"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("prefixes"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.Prefixes); i++ {
+        return err
+      }
+    }
 
-		if m.Prefixes[i] != nil {
 
-			if typeutils.IsZero(m.Prefixes[i]) { // not required
-				return nil
-			}
 
-			if err := m.Prefixes[i].ContextValidate(ctx, formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("prefixes" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("prefixes" + "." + strconv.Itoa(i))
-				}
+      }
 
-				return err
-			}
-		}
 
-	}
 
-	return nil
+  return nil
 }
-
+    
+  
+    
 func (m *BgpRoutePolicyPrefixMatch) contextValidateType(ctx context.Context, formats strfmt.Registry) error {
+       
+      
+  
+      
+      if typeutils.IsZero(m.Type) { // not required
+        return nil
+      }
+      
+      if err := m.Type.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("type")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("type")
+        }
 
-	if typeutils.IsZero(m.Type) { // not required
-		return nil
-	}
+        return err
+      }
 
-	if err := m.Type.ContextValidate(ctx, formats); err != nil {
-		ve := new(errors.Validation)
-		if stderrors.As(err, &ve) {
-			return ve.ValidateName("type")
-		}
-		ce := new(errors.CompositeError)
-		if stderrors.As(err, &ce) {
-			return ce.ValidateName("type")
-		}
 
-		return err
-	}
 
-	return nil
+  return nil
 }
+    
+   
+   
 
+  
 // MarshalBinary interface implementation
 func (m *BgpRoutePolicyPrefixMatch) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *BgpRoutePolicyPrefixMatch) UnmarshalBinary(b []byte) error {
-	var res BgpRoutePolicyPrefixMatch
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res BgpRoutePolicyPrefixMatch
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

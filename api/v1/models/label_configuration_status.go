@@ -6,264 +6,417 @@
 package models
 
 import (
-	"context"
-	stderrors "errors"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // LabelConfigurationStatus Labels and label configuration of an endpoint
 //
 // swagger:model LabelConfigurationStatus
-type LabelConfigurationStatus struct {
+      type LabelConfigurationStatus struct {
+  
+  
+    // All labels derived from the orchestration system
+Derived Labels `json:"derived,omitempty"`
 
-	// All labels derived from the orchestration system
-	Derived Labels `json:"derived,omitempty"`
+  
+    // Labels derived from orchestration system which have been disabled.
+Disabled Labels `json:"disabled,omitempty"`
 
-	// Labels derived from orchestration system which have been disabled.
-	Disabled Labels `json:"disabled,omitempty"`
+  
+    // The current configuration
+Realized *LabelConfigurationSpec `json:"realized,omitempty"`
 
-	// The current configuration
-	Realized *LabelConfigurationSpec `json:"realized,omitempty"`
+  
+    // Labels derived from orchestration system that are used in computing a security identity
+SecurityRelevant Labels `json:"security-relevant,omitempty"`
 
-	// Labels derived from orchestration system that are used in computing a security identity
-	SecurityRelevant Labels `json:"security-relevant,omitempty"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this label configuration status
 func (m *LabelConfigurationStatus) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateDerived(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+      if err := m.validateDerived(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+      if err := m.validateDisabled(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+      if err := m.validateRealized(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+      if err := m.validateSecurityRelevant(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  
+  
 
-	if err := m.validateDisabled(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateRealized(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateSecurityRelevant(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+      
+      
+      
+      
+
+      
 func (m *LabelConfigurationStatus) validateDerived(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Derived) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Derived) { // not required
+    return nil
+  }
+        
+    
+  
+  
+  
+  
+  
+  
+  
+      if err := m.Derived.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("derived")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("derived")
+        }
 
-	if err := m.Derived.Validate(formats); err != nil {
-		ve := new(errors.Validation)
-		if stderrors.As(err, &ve) {
-			return ve.ValidateName("derived")
-		}
-		ce := new(errors.CompositeError)
-		if stderrors.As(err, &ce) {
-			return ce.ValidateName("derived")
-		}
+        return err
+      }
 
-		return err
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+      
+      
+      
+      
 
+      
 func (m *LabelConfigurationStatus) validateDisabled(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Disabled) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Disabled) { // not required
+    return nil
+  }
+        
+    
+  
+  
+  
+  
+  
+  
+  
+      if err := m.Disabled.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("disabled")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("disabled")
+        }
 
-	if err := m.Disabled.Validate(formats); err != nil {
-		ve := new(errors.Validation)
-		if stderrors.As(err, &ve) {
-			return ve.ValidateName("disabled")
-		}
-		ce := new(errors.CompositeError)
-		if stderrors.As(err, &ce) {
-			return ce.ValidateName("disabled")
-		}
+        return err
+      }
 
-		return err
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+      
+      
+      
+      
 
+      
 func (m *LabelConfigurationStatus) validateRealized(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Realized) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Realized) { // not required
+    return nil
+  }
+        
+    
+      if m.Realized != nil {
+      if err := m.Realized.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("realized")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("realized")
+        }
 
-	if m.Realized != nil {
-		if err := m.Realized.Validate(formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("realized")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("realized")
-			}
+        return err
+      }
+    }
 
-			return err
-		}
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+      
+      
+      
+      
 
+      
 func (m *LabelConfigurationStatus) validateSecurityRelevant(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.SecurityRelevant) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.SecurityRelevant) { // not required
+    return nil
+  }
+        
+    
+  
+  
+  
+  
+  
+  
+  
+      if err := m.SecurityRelevant.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("security-relevant")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("security-relevant")
+        }
 
-	if err := m.SecurityRelevant.Validate(formats); err != nil {
-		ve := new(errors.Validation)
-		if stderrors.As(err, &ve) {
-			return ve.ValidateName("security-relevant")
-		}
-		ce := new(errors.CompositeError)
-		if stderrors.As(err, &ce) {
-			return ce.ValidateName("security-relevant")
-		}
+        return err
+      }
 
-		return err
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+  
 
+  
+
+    
 // ContextValidate validate this label configuration status based on the context it is used
 func (m *LabelConfigurationStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
+  var res []error
+   
+  
 
-	if err := m.contextValidateDerived(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
-	if err := m.contextValidateDisabled(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateRealized(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateSecurityRelevant(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+     
+      if err := m.contextValidateDerived(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+     
+      if err := m.contextValidateDisabled(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+     
+      if err := m.contextValidateRealized(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+     
+      if err := m.contextValidateSecurityRelevant(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+
+  
+    
 func (m *LabelConfigurationStatus) contextValidateDerived(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+  
+      if err := m.Derived.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("derived")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("derived")
+        }
 
-	if err := m.Derived.ContextValidate(ctx, formats); err != nil {
-		ve := new(errors.Validation)
-		if stderrors.As(err, &ve) {
-			return ve.ValidateName("derived")
-		}
-		ce := new(errors.CompositeError)
-		if stderrors.As(err, &ce) {
-			return ce.ValidateName("derived")
-		}
+        return err
+      }
 
-		return err
-	}
 
-	return nil
+
+  return nil
 }
-
+    
+  
+    
 func (m *LabelConfigurationStatus) contextValidateDisabled(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+  
+      if err := m.Disabled.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("disabled")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("disabled")
+        }
 
-	if err := m.Disabled.ContextValidate(ctx, formats); err != nil {
-		ve := new(errors.Validation)
-		if stderrors.As(err, &ve) {
-			return ve.ValidateName("disabled")
-		}
-		ce := new(errors.CompositeError)
-		if stderrors.As(err, &ce) {
-			return ce.ValidateName("disabled")
-		}
+        return err
+      }
 
-		return err
-	}
 
-	return nil
+
+  return nil
 }
-
+    
+  
+    
 func (m *LabelConfigurationStatus) contextValidateRealized(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+      if m.Realized != nil {
+      
+      if typeutils.IsZero(m.Realized) { // not required
+        return nil
+      }
+      
+      if err := m.Realized.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("realized")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("realized")
+        }
 
-	if m.Realized != nil {
+        return err
+      }
+    }
 
-		if typeutils.IsZero(m.Realized) { // not required
-			return nil
-		}
 
-		if err := m.Realized.ContextValidate(ctx, formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("realized")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("realized")
-			}
 
-			return err
-		}
-	}
-
-	return nil
+  return nil
 }
-
+    
+  
+    
 func (m *LabelConfigurationStatus) contextValidateSecurityRelevant(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+  
+      if err := m.SecurityRelevant.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("security-relevant")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("security-relevant")
+        }
 
-	if err := m.SecurityRelevant.ContextValidate(ctx, formats); err != nil {
-		ve := new(errors.Validation)
-		if stderrors.As(err, &ve) {
-			return ve.ValidateName("security-relevant")
-		}
-		ce := new(errors.CompositeError)
-		if stderrors.As(err, &ce) {
-			return ce.ValidateName("security-relevant")
-		}
+        return err
+      }
 
-		return err
-	}
 
-	return nil
+
+  return nil
 }
+    
+   
+   
 
+  
 // MarshalBinary interface implementation
 func (m *LabelConfigurationStatus) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *LabelConfigurationStatus) UnmarshalBinary(b []byte) error {
-	var res LabelConfigurationStatus
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res LabelConfigurationStatus
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

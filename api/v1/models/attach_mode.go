@@ -6,73 +6,111 @@
 package models
 
 import (
-	"context"
-	"encoding/json"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
+	"github.com/go-openapi/swag/typeutils"
 	"github.com/go-openapi/validate"
 )
 
 // AttachMode Core datapath attachment mode
 //
 // swagger:model AttachMode
-type AttachMode string
+    type AttachMode string
+  
 
 func NewAttachMode(value AttachMode) *AttachMode {
-	return &value
+  return &value
 }
 
 // Pointer returns a pointer to a freshly-allocated AttachMode.
 func (m AttachMode) Pointer() *AttachMode {
-	return &m
+  return &m
 }
-
+    
+  
+    
+      
 const (
-
-	// AttachModeTc captures enum value "tc"
+      
+  // AttachModeTc captures enum value "tc"
 	AttachModeTc AttachMode = "tc"
-
-	// AttachModeTcx captures enum value "tcx"
+      
+  // AttachModeTcx captures enum value "tcx"
 	AttachModeTcx AttachMode = "tcx"
+      
 )
+    
 
 // for schema
 var attachModeEnum []any
-
 func init() {
-	var res []AttachMode
-	if err := json.Unmarshal([]byte(`["tc","tcx"]`), &res); err != nil {
-		panic(err)
-	}
-	for _, v := range res {
-		attachModeEnum = append(attachModeEnum, v)
-	}
+  var res []AttachMode
+  if err := json.Unmarshal([]byte(`["tc","tcx"]`), &res); err != nil {
+    panic(err)
+  }
+  for _, v := range res {
+    attachModeEnum = append(attachModeEnum, v)
+  }
 }
 
 func (m AttachMode) validateAttachModeEnum(path, location string, value AttachMode) error {
-	if err := validate.EnumCase(path, location, value, attachModeEnum, true); err != nil {
-		return err
-	}
-	return nil
+  if err := validate.EnumCase(path, location, value, attachModeEnum, true); err != nil {
+    return err
+  }
+  return nil
 }
-
+  
+  
+  
 // Validate validates this attach mode
 func (m AttachMode) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  // value enum
+  if err := m.validateAttachModeEnum("", "body", m); err != nil {
+    return err
+  }
+  
 
-	// value enum
-	if err := m.validateAttachModeEnum("", "body", m); err != nil {
-		return err
-	}
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+  
+  
+
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
-// ContextValidate validates this attach mode based on context it is used
+  
+  
+
+  
+
+// ContextValidate validates this attach mode based on context it is used 
 func (m AttachMode) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
+
+
+

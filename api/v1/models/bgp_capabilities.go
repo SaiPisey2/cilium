@@ -6,45 +6,59 @@
 package models
 
 import (
-	"context"
+  stderrors "errors"
 
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
+	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // BgpCapabilities Represents the BGP capabilities.
 //
 // swagger:model BgpCapabilities
-type BgpCapabilities struct {
+      type BgpCapabilities struct {
+  
+  
+    // Base64-encoded BGP capabilities details
+Capabilities string `json:"capabilities,omitempty"`
 
-	// Base64-encoded BGP capabilities details
-	Capabilities string `json:"capabilities,omitempty"`
+  
+  
 }
-
+  
 // Validate validates this bgp capabilities
 func (m *BgpCapabilities) Validate(formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
-// ContextValidate validates this bgp capabilities based on context it is used
+// ContextValidate validates this bgp capabilities based on context it is used 
 func (m *BgpCapabilities) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
+  
 // MarshalBinary interface implementation
 func (m *BgpCapabilities) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *BgpCapabilities) UnmarshalBinary(b []byte) error {
-	var res BgpCapabilities
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res BgpCapabilities
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

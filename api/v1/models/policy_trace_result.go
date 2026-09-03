@@ -6,48 +6,63 @@
 package models
 
 import (
-	"context"
+  stderrors "errors"
 
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
+	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // PolicyTraceResult Response to a policy resolution process
 //
 // swagger:model PolicyTraceResult
-type PolicyTraceResult struct {
+      type PolicyTraceResult struct {
+  
+  
+    // log
+Log string `json:"log,omitempty"`
 
-	// log
-	Log string `json:"log,omitempty"`
+  
+    // verdict
+Verdict string `json:"verdict,omitempty"`
 
-	// verdict
-	Verdict string `json:"verdict,omitempty"`
+  
+  
 }
-
+  
 // Validate validates this policy trace result
 func (m *PolicyTraceResult) Validate(formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
-// ContextValidate validates this policy trace result based on context it is used
+// ContextValidate validates this policy trace result based on context it is used 
 func (m *PolicyTraceResult) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
+  
 // MarshalBinary interface implementation
 func (m *PolicyTraceResult) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *PolicyTraceResult) UnmarshalBinary(b []byte) error {
-	var res PolicyTraceResult
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res PolicyTraceResult
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

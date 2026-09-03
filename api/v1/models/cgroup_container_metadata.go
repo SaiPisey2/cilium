@@ -6,48 +6,63 @@
 package models
 
 import (
-	"context"
+  stderrors "errors"
 
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
+	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // CgroupContainerMetadata cgroup container metadata
 //
 // swagger:model CgroupContainerMetadata
-type CgroupContainerMetadata struct {
+      type CgroupContainerMetadata struct {
+  
+  
+    // cgroup id
+CgroupID uint64 `json:"cgroup-id,omitempty"`
 
-	// cgroup id
-	CgroupID uint64 `json:"cgroup-id,omitempty"`
+  
+    // cgroup path
+CgroupPath string `json:"cgroup-path,omitempty"`
 
-	// cgroup path
-	CgroupPath string `json:"cgroup-path,omitempty"`
+  
+  
 }
-
+  
 // Validate validates this cgroup container metadata
 func (m *CgroupContainerMetadata) Validate(formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
-// ContextValidate validates this cgroup container metadata based on context it is used
+// ContextValidate validates this cgroup container metadata based on context it is used 
 func (m *CgroupContainerMetadata) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
+  
 // MarshalBinary interface implementation
 func (m *CgroupContainerMetadata) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *CgroupContainerMetadata) UnmarshalBinary(b []byte) error {
-	var res CgroupContainerMetadata
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res CgroupContainerMetadata
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

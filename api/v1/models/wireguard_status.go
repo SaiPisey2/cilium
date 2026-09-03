@@ -6,134 +6,225 @@
 package models
 
 import (
-	"context"
-	stderrors "errors"
-	"strconv"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // WireguardStatus Status of the WireGuard agent
-//
+// 
 // +k8s:deepcopy-gen=true
 //
 // swagger:model WireguardStatus
-type WireguardStatus struct {
+      type WireguardStatus struct {
+  
+  
+    // WireGuard interfaces managed by this Cilium instance
+Interfaces []*WireguardInterface `json:"interfaces"`
 
-	// WireGuard interfaces managed by this Cilium instance
-	Interfaces []*WireguardInterface `json:"interfaces"`
+  
+    // Label selector for nodes which will opt-out of node-to-node encryption
+NodeEncryptOptOutLabels string `json:"node-encrypt-opt-out-labels,omitempty"`
 
-	// Label selector for nodes which will opt-out of node-to-node encryption
-	NodeEncryptOptOutLabels string `json:"node-encrypt-opt-out-labels,omitempty"`
+  
+    // Node Encryption status
+NodeEncryption string `json:"node-encryption,omitempty"`
 
-	// Node Encryption status
-	NodeEncryption string `json:"node-encryption,omitempty"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this wireguard status
 func (m *WireguardStatus) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateInterfaces(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+      if err := m.validateInterfaces(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+  
+    
+  
+  
+  
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+      
+      
+      
+      
+
+      
 func (m *WireguardStatus) validateInterfaces(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Interfaces) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Interfaces) { // not required
+    return nil
+  }
+        
+    
+  
+  
+  
+  
+  
+  
+  
+      for i := 0; i < len(m.Interfaces); i++ {
+          if typeutils.IsZero(m.Interfaces[i]) { // not required
+            continue
+          }
+        
+    
+      if m.Interfaces[i] != nil {
+      if err := m.Interfaces[i].Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("interfaces"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("interfaces"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.Interfaces); i++ {
-		if typeutils.IsZero(m.Interfaces[i]) { // not required
-			continue
-		}
+        return err
+      }
+    }
 
-		if m.Interfaces[i] != nil {
-			if err := m.Interfaces[i].Validate(formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("interfaces" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("interfaces" + "." + strconv.Itoa(i))
-				}
 
-				return err
-			}
-		}
+      }
 
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+  
+    
+  
+  
 
+  
+
+    
 // ContextValidate validate this wireguard status based on the context it is used
 func (m *WireguardStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
+  var res []error
+   
+  
 
-	if err := m.contextValidateInterfaces(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+     
+      if err := m.contextValidateInterfaces(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+  
+    
+  
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+
+  
+    
 func (m *WireguardStatus) contextValidateInterfaces(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+  
+      for i := 0; i < len(m.Interfaces); i++ {
+        
+    
+  
+      if m.Interfaces[i] != nil {
+      
+      if typeutils.IsZero(m.Interfaces[i]) { // not required
+        return nil
+      }
+      
+      if err := m.Interfaces[i].ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("interfaces"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("interfaces"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.Interfaces); i++ {
+        return err
+      }
+    }
 
-		if m.Interfaces[i] != nil {
 
-			if typeutils.IsZero(m.Interfaces[i]) { // not required
-				return nil
-			}
 
-			if err := m.Interfaces[i].ContextValidate(ctx, formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("interfaces" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("interfaces" + "." + strconv.Itoa(i))
-				}
+      }
 
-				return err
-			}
-		}
 
-	}
 
-	return nil
+  return nil
 }
+    
+  
+    
+  
+    
+   
+   
 
+  
 // MarshalBinary interface implementation
 func (m *WireguardStatus) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *WireguardStatus) UnmarshalBinary(b []byte) error {
-	var res WireguardStatus
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res WireguardStatus
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

@@ -6,126 +6,199 @@
 package models
 
 import (
-	"context"
-	stderrors "errors"
-	"strconv"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // CgroupDumpMetadata cgroup full metadata
 //
 // swagger:model CgroupDumpMetadata
-type CgroupDumpMetadata struct {
+      type CgroupDumpMetadata struct {
+  
+  
+    // pod metadatas
+PodMetadatas []*CgroupPodMetadata `json:"pod-metadatas"`
 
-	// pod metadatas
-	PodMetadatas []*CgroupPodMetadata `json:"pod-metadatas"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this cgroup dump metadata
 func (m *CgroupDumpMetadata) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validatePodMetadatas(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+      if err := m.validatePodMetadatas(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  
+  
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+      
+      
+      
+      
+
+      
 func (m *CgroupDumpMetadata) validatePodMetadatas(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.PodMetadatas) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.PodMetadatas) { // not required
+    return nil
+  }
+        
+    
+  
+  
+  
+  
+  
+  
+  
+      for i := 0; i < len(m.PodMetadatas); i++ {
+          if typeutils.IsZero(m.PodMetadatas[i]) { // not required
+            continue
+          }
+        
+    
+      if m.PodMetadatas[i] != nil {
+      if err := m.PodMetadatas[i].Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("pod-metadatas"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("pod-metadatas"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.PodMetadatas); i++ {
-		if typeutils.IsZero(m.PodMetadatas[i]) { // not required
-			continue
-		}
+        return err
+      }
+    }
 
-		if m.PodMetadatas[i] != nil {
-			if err := m.PodMetadatas[i].Validate(formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("pod-metadatas" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("pod-metadatas" + "." + strconv.Itoa(i))
-				}
 
-				return err
-			}
-		}
+      }
 
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+  
 
+  
+
+    
 // ContextValidate validate this cgroup dump metadata based on the context it is used
 func (m *CgroupDumpMetadata) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
+  var res []error
+   
+  
 
-	if err := m.contextValidatePodMetadatas(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+     
+      if err := m.contextValidatePodMetadatas(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+
+  
+    
 func (m *CgroupDumpMetadata) contextValidatePodMetadatas(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+  
+      for i := 0; i < len(m.PodMetadatas); i++ {
+        
+    
+  
+      if m.PodMetadatas[i] != nil {
+      
+      if typeutils.IsZero(m.PodMetadatas[i]) { // not required
+        return nil
+      }
+      
+      if err := m.PodMetadatas[i].ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("pod-metadatas"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("pod-metadatas"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.PodMetadatas); i++ {
+        return err
+      }
+    }
 
-		if m.PodMetadatas[i] != nil {
 
-			if typeutils.IsZero(m.PodMetadatas[i]) { // not required
-				return nil
-			}
 
-			if err := m.PodMetadatas[i].ContextValidate(ctx, formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("pod-metadatas" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("pod-metadatas" + "." + strconv.Itoa(i))
-				}
+      }
 
-				return err
-			}
-		}
 
-	}
 
-	return nil
+  return nil
 }
+    
+   
+   
 
+  
 // MarshalBinary interface implementation
 func (m *CgroupDumpMetadata) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *CgroupDumpMetadata) UnmarshalBinary(b []byte) error {
-	var res CgroupDumpMetadata
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res CgroupDumpMetadata
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

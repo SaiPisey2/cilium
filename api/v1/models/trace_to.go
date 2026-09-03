@@ -6,178 +6,282 @@
 package models
 
 import (
-	"context"
-	stderrors "errors"
-	"strconv"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // TraceTo trace to
 //
 // swagger:model TraceTo
-type TraceTo struct {
+      type TraceTo struct {
+  
+  
+    // List of Layer 4 port and protocol pairs which will be used in communication
+// from the source identity to the destination identity.
+// 
+Dports []*Port `json:"dports"`
 
-	// List of Layer 4 port and protocol pairs which will be used in communication
-	// from the source identity to the destination identity.
-	//
-	Dports []*Port `json:"dports"`
+  
+    // labels
+Labels Labels `json:"labels,omitempty"`
 
-	// labels
-	Labels Labels `json:"labels,omitempty"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this trace to
 func (m *TraceTo) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateDports(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+      if err := m.validateDports(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+      if err := m.validateLabels(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  
+  
 
-	if err := m.validateLabels(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+      
+      
+      
+      
+
+      
 func (m *TraceTo) validateDports(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Dports) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Dports) { // not required
+    return nil
+  }
+        
+    
+  
+  
+  
+  
+  
+  
+  
+      for i := 0; i < len(m.Dports); i++ {
+          if typeutils.IsZero(m.Dports[i]) { // not required
+            continue
+          }
+        
+    
+      if m.Dports[i] != nil {
+      if err := m.Dports[i].Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("dports"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("dports"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.Dports); i++ {
-		if typeutils.IsZero(m.Dports[i]) { // not required
-			continue
-		}
+        return err
+      }
+    }
 
-		if m.Dports[i] != nil {
-			if err := m.Dports[i].Validate(formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("dports" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("dports" + "." + strconv.Itoa(i))
-				}
 
-				return err
-			}
-		}
+      }
 
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+      
+      
+      
+      
 
+      
 func (m *TraceTo) validateLabels(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Labels) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Labels) { // not required
+    return nil
+  }
+        
+    
+  
+  
+  
+  
+  
+  
+  
+      if err := m.Labels.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("labels")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("labels")
+        }
 
-	if err := m.Labels.Validate(formats); err != nil {
-		ve := new(errors.Validation)
-		if stderrors.As(err, &ve) {
-			return ve.ValidateName("labels")
-		}
-		ce := new(errors.CompositeError)
-		if stderrors.As(err, &ce) {
-			return ce.ValidateName("labels")
-		}
+        return err
+      }
 
-		return err
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+  
 
+  
+
+    
 // ContextValidate validate this trace to based on the context it is used
 func (m *TraceTo) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
+  var res []error
+   
+  
 
-	if err := m.contextValidateDports(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
-	if err := m.contextValidateLabels(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+     
+      if err := m.contextValidateDports(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+     
+      if err := m.contextValidateLabels(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+
+  
+    
 func (m *TraceTo) contextValidateDports(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+  
+      for i := 0; i < len(m.Dports); i++ {
+        
+    
+  
+      if m.Dports[i] != nil {
+      
+      if typeutils.IsZero(m.Dports[i]) { // not required
+        return nil
+      }
+      
+      if err := m.Dports[i].ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("dports"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("dports"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.Dports); i++ {
+        return err
+      }
+    }
 
-		if m.Dports[i] != nil {
 
-			if typeutils.IsZero(m.Dports[i]) { // not required
-				return nil
-			}
 
-			if err := m.Dports[i].ContextValidate(ctx, formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("dports" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("dports" + "." + strconv.Itoa(i))
-				}
+      }
 
-				return err
-			}
-		}
 
-	}
 
-	return nil
+  return nil
 }
-
+    
+  
+    
 func (m *TraceTo) contextValidateLabels(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+  
+      if err := m.Labels.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("labels")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("labels")
+        }
 
-	if err := m.Labels.ContextValidate(ctx, formats); err != nil {
-		ve := new(errors.Validation)
-		if stderrors.As(err, &ve) {
-			return ve.ValidateName("labels")
-		}
-		ce := new(errors.CompositeError)
-		if stderrors.As(err, &ce) {
-			return ce.ValidateName("labels")
-		}
+        return err
+      }
 
-		return err
-	}
 
-	return nil
+
+  return nil
 }
+    
+   
+   
 
+  
 // MarshalBinary interface implementation
 func (m *TraceTo) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *TraceTo) UnmarshalBinary(b []byte) error {
-	var res TraceTo
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res TraceTo
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

@@ -6,76 +6,114 @@
 package models
 
 import (
-	"context"
-	"encoding/json"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
+	"github.com/go-openapi/swag/typeutils"
 	"github.com/go-openapi/validate"
 )
 
 // BgpRoutePolicyMatchType Defines BGP route policy matching logic in case of multiple match elements.
 //
 // swagger:model BgpRoutePolicyMatchType
-type BgpRoutePolicyMatchType string
+    type BgpRoutePolicyMatchType string
+  
 
 func NewBgpRoutePolicyMatchType(value BgpRoutePolicyMatchType) *BgpRoutePolicyMatchType {
-	return &value
+  return &value
 }
 
 // Pointer returns a pointer to a freshly-allocated BgpRoutePolicyMatchType.
 func (m BgpRoutePolicyMatchType) Pointer() *BgpRoutePolicyMatchType {
-	return &m
+  return &m
 }
-
+    
+  
+    
+      
 const (
-
-	// BgpRoutePolicyMatchTypeAny captures enum value "any"
+      
+  // BgpRoutePolicyMatchTypeAny captures enum value "any"
 	BgpRoutePolicyMatchTypeAny BgpRoutePolicyMatchType = "any"
-
-	// BgpRoutePolicyMatchTypeAll captures enum value "all"
+      
+  // BgpRoutePolicyMatchTypeAll captures enum value "all"
 	BgpRoutePolicyMatchTypeAll BgpRoutePolicyMatchType = "all"
-
-	// BgpRoutePolicyMatchTypeInvert captures enum value "invert"
+      
+  // BgpRoutePolicyMatchTypeInvert captures enum value "invert"
 	BgpRoutePolicyMatchTypeInvert BgpRoutePolicyMatchType = "invert"
+      
 )
+    
 
 // for schema
 var bgpRoutePolicyMatchTypeEnum []any
-
 func init() {
-	var res []BgpRoutePolicyMatchType
-	if err := json.Unmarshal([]byte(`["any","all","invert"]`), &res); err != nil {
-		panic(err)
-	}
-	for _, v := range res {
-		bgpRoutePolicyMatchTypeEnum = append(bgpRoutePolicyMatchTypeEnum, v)
-	}
+  var res []BgpRoutePolicyMatchType
+  if err := json.Unmarshal([]byte(`["any","all","invert"]`), &res); err != nil {
+    panic(err)
+  }
+  for _, v := range res {
+    bgpRoutePolicyMatchTypeEnum = append(bgpRoutePolicyMatchTypeEnum, v)
+  }
 }
 
 func (m BgpRoutePolicyMatchType) validateBgpRoutePolicyMatchTypeEnum(path, location string, value BgpRoutePolicyMatchType) error {
-	if err := validate.EnumCase(path, location, value, bgpRoutePolicyMatchTypeEnum, true); err != nil {
-		return err
-	}
-	return nil
+  if err := validate.EnumCase(path, location, value, bgpRoutePolicyMatchTypeEnum, true); err != nil {
+    return err
+  }
+  return nil
 }
-
+  
+  
+  
 // Validate validates this bgp route policy match type
 func (m BgpRoutePolicyMatchType) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  // value enum
+  if err := m.validateBgpRoutePolicyMatchTypeEnum("", "body", m); err != nil {
+    return err
+  }
+  
 
-	// value enum
-	if err := m.validateBgpRoutePolicyMatchTypeEnum("", "body", m); err != nil {
-		return err
-	}
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+  
+  
+
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
-// ContextValidate validates this bgp route policy match type based on context it is used
+  
+  
+
+  
+
+// ContextValidate validates this bgp route policy match type based on context it is used 
 func (m BgpRoutePolicyMatchType) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
+
+
+

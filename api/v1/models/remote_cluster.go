@@ -6,229 +6,439 @@
 package models
 
 import (
-	"context"
-	stderrors "errors"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
 	"github.com/go-openapi/validate"
 )
 
 // RemoteCluster Status of remote cluster
-//
+// 
 // +k8s:deepcopy-gen=true
 //
 // swagger:model RemoteCluster
-type RemoteCluster struct {
+      type RemoteCluster struct {
+  
+  
+    // Cluster configuration exposed by the remote cluster
+Config *RemoteClusterConfig `json:"config,omitempty"`
 
-	// Cluster configuration exposed by the remote cluster
-	Config *RemoteClusterConfig `json:"config,omitempty"`
+  
+    // Indicates whether the connection to the remote kvstore is established
+Connected bool `json:"connected,omitempty"`
 
-	// Indicates whether the connection to the remote kvstore is established
-	Connected bool `json:"connected,omitempty"`
+  
+    // Time of last failure that occurred while attempting to reach the cluster
+// Format: date-time
+LastFailure strfmt.DateTime `json:"last-failure,omitempty"`
 
-	// Time of last failure that occurred while attempting to reach the cluster
-	// Format: date-time
-	LastFailure strfmt.DateTime `json:"last-failure,omitempty"`
+  
+    // Name of the cluster
+Name string `json:"name,omitempty"`
 
-	// Name of the cluster
-	Name string `json:"name,omitempty"`
+  
+    // Number of endpoint slices in the cluster
+NumEndpointSlices int64 `json:"num-endpoint-slices,omitempty"`
 
-	// Number of endpoint slices in the cluster
-	NumEndpointSlices int64 `json:"num-endpoint-slices,omitempty"`
+  
+    // Number of endpoints in the cluster
+NumEndpoints int64 `json:"num-endpoints,omitempty"`
 
-	// Number of endpoints in the cluster
-	NumEndpoints int64 `json:"num-endpoints,omitempty"`
+  
+    // Number of failures reaching the cluster
+NumFailures int64 `json:"num-failures,omitempty"`
 
-	// Number of failures reaching the cluster
-	NumFailures int64 `json:"num-failures,omitempty"`
+  
+    // Number of identities in the cluster
+NumIdentities int64 `json:"num-identities,omitempty"`
 
-	// Number of identities in the cluster
-	NumIdentities int64 `json:"num-identities,omitempty"`
+  
+    // Number of nodes in the cluster
+NumNodes int64 `json:"num-nodes,omitempty"`
 
-	// Number of nodes in the cluster
-	NumNodes int64 `json:"num-nodes,omitempty"`
+  
+    // Number of MCS-API service exports in the cluster
+NumServiceExports int64 `json:"num-service-exports,omitempty"`
 
-	// Number of MCS-API service exports in the cluster
-	NumServiceExports int64 `json:"num-service-exports,omitempty"`
+  
+    // Number of services in the cluster
+NumSharedServices int64 `json:"num-shared-services,omitempty"`
 
-	// Number of services in the cluster
-	NumSharedServices int64 `json:"num-shared-services,omitempty"`
+  
+    // Indicates readiness of the remote cluster
+Ready bool `json:"ready,omitempty"`
 
-	// Indicates readiness of the remote cluster
-	Ready bool `json:"ready,omitempty"`
+  
+    // Status of the control plane
+Status string `json:"status,omitempty"`
 
-	// Status of the control plane
-	Status string `json:"status,omitempty"`
+  
+    // Synchronization status about each resource type
+Synced *RemoteClusterSynced `json:"synced,omitempty"`
 
-	// Synchronization status about each resource type
-	Synced *RemoteClusterSynced `json:"synced,omitempty"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this remote cluster
 func (m *RemoteCluster) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateConfig(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+      if err := m.validateConfig(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+  
+    
+      if err := m.validateLastFailure(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      if err := m.validateSynced(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  
+  
 
-	if err := m.validateLastFailure(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateSynced(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+      
+      
+      
+      
+
+      
 func (m *RemoteCluster) validateConfig(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Config) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Config) { // not required
+    return nil
+  }
+        
+    
+      if m.Config != nil {
+      if err := m.Config.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("config")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("config")
+        }
 
-	if m.Config != nil {
-		if err := m.Config.Validate(formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("config")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("config")
-			}
+        return err
+      }
+    }
 
-			return err
-		}
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+  
+    
+      
+      
+      
+      
 
+      
 func (m *RemoteCluster) validateLastFailure(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.LastFailure) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("last-failure", "body", "date-time", m.LastFailure.String(), formats); err != nil {
-		return err
-	}
-
-	return nil
+  if typeutils.IsZero(m.LastFailure) { // not required
+    return nil
+  }
+        
+      
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    if err := validate.FormatOf("last-failure", "body", "date-time", m.LastFailure.String(), formats); err != nil {
+  return err
 }
 
+
+
+
+  return nil
+}
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+      
+      
+      
+      
+
+      
 func (m *RemoteCluster) validateSynced(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Synced) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Synced) { // not required
+    return nil
+  }
+        
+    
+      if m.Synced != nil {
+      if err := m.Synced.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("synced")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("synced")
+        }
 
-	if m.Synced != nil {
-		if err := m.Synced.Validate(formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("synced")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("synced")
-			}
+        return err
+      }
+    }
 
-			return err
-		}
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+  
 
+  
+
+    
 // ContextValidate validate this remote cluster based on the context it is used
 func (m *RemoteCluster) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
+  var res []error
+   
+  
 
-	if err := m.contextValidateConfig(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
-	if err := m.contextValidateSynced(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+     
+      if err := m.contextValidateConfig(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+     
+      if err := m.contextValidateSynced(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+
+  
+    
 func (m *RemoteCluster) contextValidateConfig(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+      if m.Config != nil {
+      
+      if typeutils.IsZero(m.Config) { // not required
+        return nil
+      }
+      
+      if err := m.Config.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("config")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("config")
+        }
 
-	if m.Config != nil {
+        return err
+      }
+    }
 
-		if typeutils.IsZero(m.Config) { // not required
-			return nil
-		}
 
-		if err := m.Config.ContextValidate(ctx, formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("config")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("config")
-			}
 
-			return err
-		}
-	}
-
-	return nil
+  return nil
 }
-
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
 func (m *RemoteCluster) contextValidateSynced(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+      if m.Synced != nil {
+      
+      if typeutils.IsZero(m.Synced) { // not required
+        return nil
+      }
+      
+      if err := m.Synced.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("synced")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("synced")
+        }
 
-	if m.Synced != nil {
+        return err
+      }
+    }
 
-		if typeutils.IsZero(m.Synced) { // not required
-			return nil
-		}
 
-		if err := m.Synced.ContextValidate(ctx, formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("synced")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("synced")
-			}
 
-			return err
-		}
-	}
-
-	return nil
+  return nil
 }
+    
+   
+   
 
+  
 // MarshalBinary interface implementation
 func (m *RemoteCluster) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *RemoteCluster) UnmarshalBinary(b []byte) error {
-	var res RemoteCluster
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res RemoteCluster
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

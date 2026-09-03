@@ -6,112 +6,182 @@
 package models
 
 import (
-	"context"
-	stderrors "errors"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // BgpRoutePolicyNeighborMatch Matches a neighbor in a BGP route policy
 //
 // swagger:model BgpRoutePolicyNeighborMatch
-type BgpRoutePolicyNeighborMatch struct {
+      type BgpRoutePolicyNeighborMatch struct {
+  
+  
+    // Neighbor IP addresses to match with
+Neighbors []string `json:"neighbors"`
 
-	// Neighbor IP addresses to match with
-	Neighbors []string `json:"neighbors"`
+  
+    // Defines matching logic in case of multiple neighbors
+Type BgpRoutePolicyMatchType `json:"type,omitempty"`
 
-	// Defines matching logic in case of multiple neighbors
-	Type BgpRoutePolicyMatchType `json:"type,omitempty"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this bgp route policy neighbor match
 func (m *BgpRoutePolicyNeighborMatch) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateType(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+  
+    
+      if err := m.validateType(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  
+  
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+  
+    
+      
+      
+      
+      
+
+      
 func (m *BgpRoutePolicyNeighborMatch) validateType(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Type) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Type) { // not required
+    return nil
+  }
+        
+      
+      if err := m.Type.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("type")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("type")
+        }
 
-	if err := m.Type.Validate(formats); err != nil {
-		ve := new(errors.Validation)
-		if stderrors.As(err, &ve) {
-			return ve.ValidateName("type")
-		}
-		ce := new(errors.CompositeError)
-		if stderrors.As(err, &ce) {
-			return ce.ValidateName("type")
-		}
+        return err
+      }
 
-		return err
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+  
 
+  
+
+    
 // ContextValidate validate this bgp route policy neighbor match based on the context it is used
 func (m *BgpRoutePolicyNeighborMatch) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
+  var res []error
+   
+  
 
-	if err := m.contextValidateType(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+    
+  
+     
+      if err := m.contextValidateType(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+
+  
+    
+  
+    
 func (m *BgpRoutePolicyNeighborMatch) contextValidateType(ctx context.Context, formats strfmt.Registry) error {
+       
+      
+  
+      
+      if typeutils.IsZero(m.Type) { // not required
+        return nil
+      }
+      
+      if err := m.Type.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("type")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("type")
+        }
 
-	if typeutils.IsZero(m.Type) { // not required
-		return nil
-	}
+        return err
+      }
 
-	if err := m.Type.ContextValidate(ctx, formats); err != nil {
-		ve := new(errors.Validation)
-		if stderrors.As(err, &ve) {
-			return ve.ValidateName("type")
-		}
-		ce := new(errors.CompositeError)
-		if stderrors.As(err, &ce) {
-			return ce.ValidateName("type")
-		}
 
-		return err
-	}
 
-	return nil
+  return nil
 }
+    
+   
+   
 
+  
 // MarshalBinary interface implementation
 func (m *BgpRoutePolicyNeighborMatch) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *BgpRoutePolicyNeighborMatch) UnmarshalBinary(b []byte) error {
-	var res BgpRoutePolicyNeighborMatch
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res BgpRoutePolicyNeighborMatch
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

@@ -6,51 +6,67 @@
 package models
 
 import (
-	"context"
+  stderrors "errors"
 
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
+	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // IPV4BigTCP Status of IPv4 BIG TCP
 //
 // swagger:model IPV4BigTCP
-type IPV4BigTCP struct {
+      type IPV4BigTCP struct {
+  
+  
+    // Is IPv4 BIG TCP enabled
+Enabled bool `json:"enabled,omitempty"`
 
-	// Is IPv4 BIG TCP enabled
-	Enabled bool `json:"enabled,omitempty"`
+  
+    // Maximum IPv4 GRO size
+MaxGRO int64 `json:"maxGRO,omitempty"`
 
-	// Maximum IPv4 GRO size
-	MaxGRO int64 `json:"maxGRO,omitempty"`
+  
+    // Maximum IPv4 GSO size
+MaxGSO int64 `json:"maxGSO,omitempty"`
 
-	// Maximum IPv4 GSO size
-	MaxGSO int64 `json:"maxGSO,omitempty"`
+  
+  
 }
-
+  
 // Validate validates this IP v4 big TCP
 func (m *IPV4BigTCP) Validate(formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
-// ContextValidate validates this IP v4 big TCP based on context it is used
+// ContextValidate validates this IP v4 big TCP based on context it is used 
 func (m *IPV4BigTCP) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
+  
 // MarshalBinary interface implementation
 func (m *IPV4BigTCP) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *IPV4BigTCP) UnmarshalBinary(b []byte) error {
-	var res IPV4BigTCP
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res IPV4BigTCP
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

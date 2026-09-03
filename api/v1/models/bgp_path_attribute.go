@@ -6,45 +6,59 @@
 package models
 
 import (
-	"context"
+  stderrors "errors"
 
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
+	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // BgpPathAttribute Single BGP path attribute specific for the path
 //
 // swagger:model BgpPathAttribute
-type BgpPathAttribute struct {
+      type BgpPathAttribute struct {
+  
+  
+    // Base64-encoded BGP path attribute in the BGP UPDATE message format
+Base64 string `json:"base64,omitempty"`
 
-	// Base64-encoded BGP path attribute in the BGP UPDATE message format
-	Base64 string `json:"base64,omitempty"`
+  
+  
 }
-
+  
 // Validate validates this bgp path attribute
 func (m *BgpPathAttribute) Validate(formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
-// ContextValidate validates this bgp path attribute based on context it is used
+// ContextValidate validates this bgp path attribute based on context it is used 
 func (m *BgpPathAttribute) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
+  
 // MarshalBinary interface implementation
 func (m *BgpPathAttribute) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *BgpPathAttribute) UnmarshalBinary(b []byte) error {
-	var res BgpPathAttribute
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res BgpPathAttribute
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

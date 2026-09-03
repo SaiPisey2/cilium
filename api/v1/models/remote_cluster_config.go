@@ -6,121 +6,206 @@
 package models
 
 import (
-	"context"
-	"encoding/json"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
 	"github.com/go-openapi/validate"
 )
 
 // RemoteClusterConfig Cluster configuration exposed by the remote cluster
-//
+// 
 // +k8s:deepcopy-gen=true
 //
 // swagger:model RemoteClusterConfig
-type RemoteClusterConfig struct {
+      type RemoteClusterConfig struct {
+  
+  
+    // The Cluster ID advertised by the remote cluster
+ClusterID int64 `json:"cluster-id,omitempty"`
 
-	// The Cluster ID advertised by the remote cluster
-	ClusterID int64 `json:"cluster-id,omitempty"`
+  
+    // EndpointSlices export mode advertised by the remote cluster
+// Enum: ["services-and-endpointslices","endpointslices-only"]
+EndpointSlicesExportMode string `json:"endpoint-slices-export-mode,omitempty"`
 
-	// EndpointSlices export mode advertised by the remote cluster
-	// Enum: ["services-and-endpointslices","endpointslices-only"]
-	EndpointSlicesExportMode string `json:"endpoint-slices-export-mode,omitempty"`
+  
+    // Whether the remote cluster information is locally cached by kvstoremesh
+Kvstoremesh bool `json:"kvstoremesh,omitempty"`
 
-	// Whether the remote cluster information is locally cached by kvstoremesh
-	Kvstoremesh bool `json:"kvstoremesh,omitempty"`
+  
+    // Whether the configuration is required to be present
+Required bool `json:"required,omitempty"`
 
-	// Whether the configuration is required to be present
-	Required bool `json:"required,omitempty"`
+  
+    // Whether the configuration has been correctly retrieved
+Retrieved bool `json:"retrieved,omitempty"`
 
-	// Whether the configuration has been correctly retrieved
-	Retrieved bool `json:"retrieved,omitempty"`
+  
+    // Whether or not MCS-API ServiceExports is enabled by the cluster (null means unsupported).
+ServiceExportsEnabled *bool `json:"service-exports-enabled,omitempty"`
 
-	// Whether or not MCS-API ServiceExports is enabled by the cluster (null means unsupported).
-	ServiceExportsEnabled *bool `json:"service-exports-enabled,omitempty"`
+  
+    // Whether the remote cluster supports per-prefix "synced" canaries
+SyncCanaries bool `json:"sync-canaries,omitempty"`
 
-	// Whether the remote cluster supports per-prefix "synced" canaries
-	SyncCanaries bool `json:"sync-canaries,omitempty"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this remote cluster config
 func (m *RemoteClusterConfig) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateEndpointSlicesExportMode(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+  
+    
+      if err := m.validateEndpointSlicesExportMode(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+  
+  
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+  
+    
+      
 var remoteClusterConfigTypeEndpointSlicesExportModePropEnum []any
 
 func init() {
-	var res []string
-	if err := json.Unmarshal([]byte(`["services-and-endpointslices","endpointslices-only"]`), &res); err != nil {
-		panic(err)
-	}
-	for _, v := range res {
-		remoteClusterConfigTypeEndpointSlicesExportModePropEnum = append(remoteClusterConfigTypeEndpointSlicesExportModePropEnum, v)
-	}
+  var res []string
+  if err := json.Unmarshal([]byte(`["services-and-endpointslices","endpointslices-only"]`), &res); err != nil {
+    panic(err)
+  }
+  for _, v := range res {
+    remoteClusterConfigTypeEndpointSlicesExportModePropEnum = append(remoteClusterConfigTypeEndpointSlicesExportModePropEnum, v)
+  }
 }
 
+        
+          
+          
 const (
-
-	// RemoteClusterConfigEndpointSlicesExportModeServicesDashAndDashEndpointslices captures enum value "services-and-endpointslices"
+          
+  // RemoteClusterConfigEndpointSlicesExportModeServicesDashAndDashEndpointslices captures enum value "services-and-endpointslices"
 	RemoteClusterConfigEndpointSlicesExportModeServicesDashAndDashEndpointslices string = "services-and-endpointslices"
-
-	// RemoteClusterConfigEndpointSlicesExportModeEndpointslicesDashOnly captures enum value "endpointslices-only"
+          
+  // RemoteClusterConfigEndpointSlicesExportModeEndpointslicesDashOnly captures enum value "endpointslices-only"
 	RemoteClusterConfigEndpointSlicesExportModeEndpointslicesDashOnly string = "endpointslices-only"
+          
 )
+        
 
 // prop value enum
 func (m *RemoteClusterConfig) validateEndpointSlicesExportModeEnum(path, location string, value string) error {
-	if err := validate.EnumCase(path, location, value, remoteClusterConfigTypeEndpointSlicesExportModePropEnum, true); err != nil {
-		return err
-	}
-	return nil
+  if err := validate.EnumCase(path, location, value, remoteClusterConfigTypeEndpointSlicesExportModePropEnum, true); err != nil {
+    return err
+  }
+  return nil
 }
+      
+      
+      
+      
 
+      
 func (m *RemoteClusterConfig) validateEndpointSlicesExportMode(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.EndpointSlicesExportMode) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.EndpointSlicesExportMode) { // not required
+    return nil
+  }
+        
+      
+  
+  
+  
+  
+  
+  
+  
+  
+  // value enum
+  if err := m.validateEndpointSlicesExportModeEnum("endpoint-slices-export-mode", "body", m.EndpointSlicesExportMode); err != nil {
+    return err
+  }
+  
 
-	// value enum
-	if err := m.validateEndpointSlicesExportModeEnum("endpoint-slices-export-mode", "body", m.EndpointSlicesExportMode); err != nil {
-		return err
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+    
+  
+  
 
-// ContextValidate validates this remote cluster config based on context it is used
+  
+
+// ContextValidate validates this remote cluster config based on context it is used 
 func (m *RemoteClusterConfig) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
+  
 // MarshalBinary interface implementation
 func (m *RemoteClusterConfig) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *RemoteClusterConfig) UnmarshalBinary(b []byte) error {
-	var res RemoteClusterConfig
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res RemoteClusterConfig
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

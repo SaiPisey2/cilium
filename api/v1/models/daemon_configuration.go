@@ -6,176 +6,260 @@
 package models
 
 import (
-	"context"
-	stderrors "errors"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // DaemonConfiguration Response to a daemon configuration request.
+// 
 //
 // swagger:model DaemonConfiguration
-type DaemonConfiguration struct {
+      type DaemonConfiguration struct {
+  
+  
+    // Changeable configuration
+Spec *DaemonConfigurationSpec `json:"spec,omitempty"`
 
-	// Changeable configuration
-	Spec *DaemonConfigurationSpec `json:"spec,omitempty"`
+  
+    // Current daemon configuration related status.Contains the addressing
+// information, k8s, node monitor and immutable and mutable
+// configuration settings.
+// 
+Status *DaemonConfigurationStatus `json:"status,omitempty"`
 
-	// Current daemon configuration related status.Contains the addressing
-	// information, k8s, node monitor and immutable and mutable
-	// configuration settings.
-	//
-	Status *DaemonConfigurationStatus `json:"status,omitempty"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this daemon configuration
 func (m *DaemonConfiguration) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateSpec(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+      if err := m.validateSpec(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+      if err := m.validateStatus(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  
+  
 
-	if err := m.validateStatus(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+      
+      
+      
+      
+
+      
 func (m *DaemonConfiguration) validateSpec(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Spec) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Spec) { // not required
+    return nil
+  }
+        
+    
+      if m.Spec != nil {
+      if err := m.Spec.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("spec")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("spec")
+        }
 
-	if m.Spec != nil {
-		if err := m.Spec.Validate(formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("spec")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("spec")
-			}
+        return err
+      }
+    }
 
-			return err
-		}
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+      
+      
+      
+      
 
+      
 func (m *DaemonConfiguration) validateStatus(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Status) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Status) { // not required
+    return nil
+  }
+        
+    
+      if m.Status != nil {
+      if err := m.Status.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("status")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("status")
+        }
 
-	if m.Status != nil {
-		if err := m.Status.Validate(formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("status")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("status")
-			}
+        return err
+      }
+    }
 
-			return err
-		}
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+  
 
+  
+
+    
 // ContextValidate validate this daemon configuration based on the context it is used
 func (m *DaemonConfiguration) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
+  var res []error
+   
+  
 
-	if err := m.contextValidateSpec(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
-	if err := m.contextValidateStatus(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+     
+      if err := m.contextValidateSpec(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+     
+      if err := m.contextValidateStatus(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+
+  
+    
 func (m *DaemonConfiguration) contextValidateSpec(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+      if m.Spec != nil {
+      
+      if typeutils.IsZero(m.Spec) { // not required
+        return nil
+      }
+      
+      if err := m.Spec.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("spec")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("spec")
+        }
 
-	if m.Spec != nil {
+        return err
+      }
+    }
 
-		if typeutils.IsZero(m.Spec) { // not required
-			return nil
-		}
 
-		if err := m.Spec.ContextValidate(ctx, formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("spec")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("spec")
-			}
 
-			return err
-		}
-	}
-
-	return nil
+  return nil
 }
-
+    
+  
+    
 func (m *DaemonConfiguration) contextValidateStatus(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+      if m.Status != nil {
+      
+      if typeutils.IsZero(m.Status) { // not required
+        return nil
+      }
+      
+      if err := m.Status.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("status")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("status")
+        }
 
-	if m.Status != nil {
+        return err
+      }
+    }
 
-		if typeutils.IsZero(m.Status) { // not required
-			return nil
-		}
 
-		if err := m.Status.ContextValidate(ctx, formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("status")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("status")
-			}
 
-			return err
-		}
-	}
-
-	return nil
+  return nil
 }
+    
+   
+   
 
+  
 // MarshalBinary interface implementation
 func (m *DaemonConfiguration) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *DaemonConfiguration) UnmarshalBinary(b []byte) error {
-	var res DaemonConfiguration
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res DaemonConfiguration
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

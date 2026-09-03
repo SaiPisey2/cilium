@@ -6,202 +6,330 @@
 package models
 
 import (
-	"context"
-	stderrors "errors"
-	"strconv"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // ClusterNodeStatus Status of cluster
 //
 // swagger:model ClusterNodeStatus
-type ClusterNodeStatus struct {
+      type ClusterNodeStatus struct {
+  
+  
+    // ID that should be used by the client to receive a diff from the previous request
+ClientID int64 `json:"client-id,omitempty"`
 
-	// ID that should be used by the client to receive a diff from the previous request
-	ClientID int64 `json:"client-id,omitempty"`
+  
+    // List of known nodes
+NodesAdded []*NodeElement `json:"nodes-added"`
 
-	// List of known nodes
-	NodesAdded []*NodeElement `json:"nodes-added"`
+  
+    // List of known nodes
+NodesRemoved []*NodeElement `json:"nodes-removed"`
 
-	// List of known nodes
-	NodesRemoved []*NodeElement `json:"nodes-removed"`
+  
+    // Name of local node (if available)
+Self string `json:"self,omitempty"`
 
-	// Name of local node (if available)
-	Self string `json:"self,omitempty"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this cluster node status
 func (m *ClusterNodeStatus) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateNodesAdded(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+  
+    
+      if err := m.validateNodesAdded(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+      if err := m.validateNodesRemoved(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+  
+  
+  
 
-	if err := m.validateNodesRemoved(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+  
+    
+      
+      
+      
+      
+
+      
 func (m *ClusterNodeStatus) validateNodesAdded(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.NodesAdded) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.NodesAdded) { // not required
+    return nil
+  }
+        
+    
+  
+  
+  
+  
+  
+  
+  
+      for i := 0; i < len(m.NodesAdded); i++ {
+          if typeutils.IsZero(m.NodesAdded[i]) { // not required
+            continue
+          }
+        
+    
+      if m.NodesAdded[i] != nil {
+      if err := m.NodesAdded[i].Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("nodes-added"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("nodes-added"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.NodesAdded); i++ {
-		if typeutils.IsZero(m.NodesAdded[i]) { // not required
-			continue
-		}
+        return err
+      }
+    }
 
-		if m.NodesAdded[i] != nil {
-			if err := m.NodesAdded[i].Validate(formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("nodes-added" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("nodes-added" + "." + strconv.Itoa(i))
-				}
 
-				return err
-			}
-		}
+      }
 
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+      
+      
+      
+      
 
+      
 func (m *ClusterNodeStatus) validateNodesRemoved(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.NodesRemoved) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.NodesRemoved) { // not required
+    return nil
+  }
+        
+    
+  
+  
+  
+  
+  
+  
+  
+      for i := 0; i < len(m.NodesRemoved); i++ {
+          if typeutils.IsZero(m.NodesRemoved[i]) { // not required
+            continue
+          }
+        
+    
+      if m.NodesRemoved[i] != nil {
+      if err := m.NodesRemoved[i].Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("nodes-removed"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("nodes-removed"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.NodesRemoved); i++ {
-		if typeutils.IsZero(m.NodesRemoved[i]) { // not required
-			continue
-		}
+        return err
+      }
+    }
 
-		if m.NodesRemoved[i] != nil {
-			if err := m.NodesRemoved[i].Validate(formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("nodes-removed" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("nodes-removed" + "." + strconv.Itoa(i))
-				}
 
-				return err
-			}
-		}
+      }
 
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+  
+  
 
+  
+
+    
 // ContextValidate validate this cluster node status based on the context it is used
 func (m *ClusterNodeStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
+  var res []error
+   
+  
 
-	if err := m.contextValidateNodesAdded(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
-	if err := m.contextValidateNodesRemoved(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+    
+  
+     
+      if err := m.contextValidateNodesAdded(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+     
+      if err := m.contextValidateNodesRemoved(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+  
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+
+  
+    
+  
+    
 func (m *ClusterNodeStatus) contextValidateNodesAdded(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+  
+      for i := 0; i < len(m.NodesAdded); i++ {
+        
+    
+  
+      if m.NodesAdded[i] != nil {
+      
+      if typeutils.IsZero(m.NodesAdded[i]) { // not required
+        return nil
+      }
+      
+      if err := m.NodesAdded[i].ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("nodes-added"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("nodes-added"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.NodesAdded); i++ {
+        return err
+      }
+    }
 
-		if m.NodesAdded[i] != nil {
 
-			if typeutils.IsZero(m.NodesAdded[i]) { // not required
-				return nil
-			}
 
-			if err := m.NodesAdded[i].ContextValidate(ctx, formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("nodes-added" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("nodes-added" + "." + strconv.Itoa(i))
-				}
+      }
 
-				return err
-			}
-		}
 
-	}
 
-	return nil
+  return nil
 }
-
+    
+  
+    
 func (m *ClusterNodeStatus) contextValidateNodesRemoved(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+  
+      for i := 0; i < len(m.NodesRemoved); i++ {
+        
+    
+  
+      if m.NodesRemoved[i] != nil {
+      
+      if typeutils.IsZero(m.NodesRemoved[i]) { // not required
+        return nil
+      }
+      
+      if err := m.NodesRemoved[i].ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("nodes-removed"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("nodes-removed"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.NodesRemoved); i++ {
+        return err
+      }
+    }
 
-		if m.NodesRemoved[i] != nil {
 
-			if typeutils.IsZero(m.NodesRemoved[i]) { // not required
-				return nil
-			}
 
-			if err := m.NodesRemoved[i].ContextValidate(ctx, formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("nodes-removed" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("nodes-removed" + "." + strconv.Itoa(i))
-				}
+      }
 
-				return err
-			}
-		}
 
-	}
 
-	return nil
+  return nil
 }
+    
+  
+    
+   
+   
 
+  
 // MarshalBinary interface implementation
 func (m *ClusterNodeStatus) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *ClusterNodeStatus) UnmarshalBinary(b []byte) error {
-	var res ClusterNodeStatus
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res ClusterNodeStatus
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

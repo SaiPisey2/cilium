@@ -6,48 +6,63 @@
 package models
 
 import (
-	"context"
+  stderrors "errors"
 
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
+	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // PrefilterSpec CIDR ranges implemented in the Prefilter
 //
 // swagger:model PrefilterSpec
-type PrefilterSpec struct {
+      type PrefilterSpec struct {
+  
+  
+    // deny
+Deny []string `json:"deny"`
 
-	// deny
-	Deny []string `json:"deny"`
+  
+    // revision
+Revision int64 `json:"revision,omitempty"`
 
-	// revision
-	Revision int64 `json:"revision,omitempty"`
+  
+  
 }
-
+  
 // Validate validates this prefilter spec
 func (m *PrefilterSpec) Validate(formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
-// ContextValidate validates this prefilter spec based on context it is used
+// ContextValidate validates this prefilter spec based on context it is used 
 func (m *PrefilterSpec) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
+  
 // MarshalBinary interface implementation
 func (m *PrefilterSpec) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *PrefilterSpec) UnmarshalBinary(b []byte) error {
-	var res PrefilterSpec
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res PrefilterSpec
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

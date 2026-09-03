@@ -6,12 +6,16 @@
 package models
 
 import (
-	"context"
-	"encoding/json"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
 	"github.com/go-openapi/validate"
 )
@@ -19,100 +23,166 @@ import (
 // BPFMapEntry BPF map cache entry
 //
 // swagger:model BPFMapEntry
-type BPFMapEntry struct {
+      type BPFMapEntry struct {
+  
+  
+    // Desired action to be performed
+// Enum: ["ok","insert","delete"]
+DesiredAction string `json:"desired-action,omitempty"`
 
-	// Desired action to be performed
-	// Enum: ["ok","insert","delete"]
-	DesiredAction string `json:"desired-action,omitempty"`
+  
+    // Key of map entry
+Key string `json:"key,omitempty"`
 
-	// Key of map entry
-	Key string `json:"key,omitempty"`
+  
+    // Last error seen while performing desired action
+LastError string `json:"last-error,omitempty"`
 
-	// Last error seen while performing desired action
-	LastError string `json:"last-error,omitempty"`
+  
+    // Value of map entry
+Value string `json:"value,omitempty"`
 
-	// Value of map entry
-	Value string `json:"value,omitempty"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this b p f map entry
 func (m *BPFMapEntry) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateDesiredAction(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+      if err := m.validateDesiredAction(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+  
+    
+  
+    
+  
+  
+  
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+      
 var bPFMapEntryTypeDesiredActionPropEnum []any
 
 func init() {
-	var res []string
-	if err := json.Unmarshal([]byte(`["ok","insert","delete"]`), &res); err != nil {
-		panic(err)
-	}
-	for _, v := range res {
-		bPFMapEntryTypeDesiredActionPropEnum = append(bPFMapEntryTypeDesiredActionPropEnum, v)
-	}
+  var res []string
+  if err := json.Unmarshal([]byte(`["ok","insert","delete"]`), &res); err != nil {
+    panic(err)
+  }
+  for _, v := range res {
+    bPFMapEntryTypeDesiredActionPropEnum = append(bPFMapEntryTypeDesiredActionPropEnum, v)
+  }
 }
 
+        
+          
+          
 const (
-
-	// BPFMapEntryDesiredActionOk captures enum value "ok"
+          
+  // BPFMapEntryDesiredActionOk captures enum value "ok"
 	BPFMapEntryDesiredActionOk string = "ok"
-
-	// BPFMapEntryDesiredActionInsert captures enum value "insert"
+          
+  // BPFMapEntryDesiredActionInsert captures enum value "insert"
 	BPFMapEntryDesiredActionInsert string = "insert"
-
-	// BPFMapEntryDesiredActionDelete captures enum value "delete"
+          
+  // BPFMapEntryDesiredActionDelete captures enum value "delete"
 	BPFMapEntryDesiredActionDelete string = "delete"
+          
 )
+        
 
 // prop value enum
 func (m *BPFMapEntry) validateDesiredActionEnum(path, location string, value string) error {
-	if err := validate.EnumCase(path, location, value, bPFMapEntryTypeDesiredActionPropEnum, true); err != nil {
-		return err
-	}
-	return nil
+  if err := validate.EnumCase(path, location, value, bPFMapEntryTypeDesiredActionPropEnum, true); err != nil {
+    return err
+  }
+  return nil
 }
+      
+      
+      
+      
 
+      
 func (m *BPFMapEntry) validateDesiredAction(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.DesiredAction) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.DesiredAction) { // not required
+    return nil
+  }
+        
+      
+  
+  
+  
+  
+  
+  
+  
+  
+  // value enum
+  if err := m.validateDesiredActionEnum("desired-action", "body", m.DesiredAction); err != nil {
+    return err
+  }
+  
 
-	// value enum
-	if err := m.validateDesiredActionEnum("desired-action", "body", m.DesiredAction); err != nil {
-		return err
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+  
+    
+  
+    
+  
+  
 
-// ContextValidate validates this b p f map entry based on context it is used
+  
+
+// ContextValidate validates this b p f map entry based on context it is used 
 func (m *BPFMapEntry) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
+  
 // MarshalBinary interface implementation
 func (m *BPFMapEntry) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *BPFMapEntry) UnmarshalBinary(b []byte) error {
-	var res BPFMapEntry
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res BPFMapEntry
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

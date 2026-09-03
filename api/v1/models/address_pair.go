@@ -6,60 +6,79 @@
 package models
 
 import (
-	"context"
+  stderrors "errors"
 
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
+	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // AddressPair Addressing information of an endpoint
 //
 // swagger:model AddressPair
-type AddressPair struct {
+      type AddressPair struct {
+  
+  
+    // IPv4 address
+IPv4 string `json:"ipv4,omitempty"`
 
-	// IPv4 address
-	IPv4 string `json:"ipv4,omitempty"`
+  
+    // UUID of IPv4 expiration timer
+IPv4ExpirationUUID string `json:"ipv4-expiration-uuid,omitempty"`
 
-	// UUID of IPv4 expiration timer
-	IPv4ExpirationUUID string `json:"ipv4-expiration-uuid,omitempty"`
+  
+    // IPAM pool from which this IPv4 address was allocated
+IPv4PoolName string `json:"ipv4-pool-name,omitempty"`
 
-	// IPAM pool from which this IPv4 address was allocated
-	IPv4PoolName string `json:"ipv4-pool-name,omitempty"`
+  
+    // IPv6 address
+IPv6 string `json:"ipv6,omitempty"`
 
-	// IPv6 address
-	IPv6 string `json:"ipv6,omitempty"`
+  
+    // UUID of IPv6 expiration timer
+IPv6ExpirationUUID string `json:"ipv6-expiration-uuid,omitempty"`
 
-	// UUID of IPv6 expiration timer
-	IPv6ExpirationUUID string `json:"ipv6-expiration-uuid,omitempty"`
+  
+    // IPAM pool from which this IPv6 address was allocated
+IPv6PoolName string `json:"ipv6-pool-name,omitempty"`
 
-	// IPAM pool from which this IPv6 address was allocated
-	IPv6PoolName string `json:"ipv6-pool-name,omitempty"`
+  
+  
 }
-
+  
 // Validate validates this address pair
 func (m *AddressPair) Validate(formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
-// ContextValidate validates this address pair based on context it is used
+// ContextValidate validates this address pair based on context it is used 
 func (m *AddressPair) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
+  
 // MarshalBinary interface implementation
 func (m *AddressPair) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *AddressPair) UnmarshalBinary(b []byte) error {
-	var res AddressPair
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res AddressPair
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

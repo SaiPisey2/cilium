@@ -6,68 +6,89 @@
 package models
 
 import (
-	"context"
+  stderrors "errors"
 
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
+	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // EndpointIdentifiers Unique identifiers for this endpoint from outside cilium
-//
+// 
 // +deepequal-gen=true
 //
 // swagger:model EndpointIdentifiers
-type EndpointIdentifiers struct {
+      type EndpointIdentifiers struct {
+  
+  
+    // ID assigned to this attachment by container runtime
+CniAttachmentID string `json:"cni-attachment-id,omitempty"`
 
-	// ID assigned to this attachment by container runtime
-	CniAttachmentID string `json:"cni-attachment-id,omitempty"`
+  
+    // ID assigned by container runtime (deprecated, may not be unique)
+ContainerID string `json:"container-id,omitempty"`
 
-	// ID assigned by container runtime (deprecated, may not be unique)
-	ContainerID string `json:"container-id,omitempty"`
+  
+    // Name assigned to container (deprecated, may not be unique)
+ContainerName string `json:"container-name,omitempty"`
 
-	// Name assigned to container (deprecated, may not be unique)
-	ContainerName string `json:"container-name,omitempty"`
+  
+    // Docker endpoint ID
+DockerEndpointID string `json:"docker-endpoint-id,omitempty"`
 
-	// Docker endpoint ID
-	DockerEndpointID string `json:"docker-endpoint-id,omitempty"`
+  
+    // Docker network ID
+DockerNetworkID string `json:"docker-network-id,omitempty"`
 
-	// Docker network ID
-	DockerNetworkID string `json:"docker-network-id,omitempty"`
+  
+    // K8s namespace for this endpoint (deprecated, may not be unique)
+K8sNamespace string `json:"k8s-namespace,omitempty"`
 
-	// K8s namespace for this endpoint (deprecated, may not be unique)
-	K8sNamespace string `json:"k8s-namespace,omitempty"`
+  
+    // K8s pod name for this endpoint (deprecated, may not be unique)
+K8sPodName string `json:"k8s-pod-name,omitempty"`
 
-	// K8s pod name for this endpoint (deprecated, may not be unique)
-	K8sPodName string `json:"k8s-pod-name,omitempty"`
+  
+    // K8s pod for this endpoint (deprecated, may not be unique)
+PodName string `json:"pod-name,omitempty"`
 
-	// K8s pod for this endpoint (deprecated, may not be unique)
-	PodName string `json:"pod-name,omitempty"`
+  
+  
 }
-
+  
 // Validate validates this endpoint identifiers
 func (m *EndpointIdentifiers) Validate(formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
-// ContextValidate validates this endpoint identifiers based on context it is used
+// ContextValidate validates this endpoint identifiers based on context it is used 
 func (m *EndpointIdentifiers) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
+  
 // MarshalBinary interface implementation
 func (m *EndpointIdentifiers) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *EndpointIdentifiers) UnmarshalBinary(b []byte) error {
-	var res EndpointIdentifiers
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res EndpointIdentifiers
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

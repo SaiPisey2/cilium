@@ -6,224 +6,332 @@
 package models
 
 import (
-	"context"
-	stderrors "errors"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // EndpointConfigurationStatus An endpoint's configuration
 //
 // swagger:model EndpointConfigurationStatus
-type EndpointConfigurationStatus struct {
+      type EndpointConfigurationStatus struct {
+  
+  
+    // Most recent error, if applicable
+Error Error `json:"error,omitempty"`
 
-	// Most recent error, if applicable
-	Error Error `json:"error,omitempty"`
+  
+    // Immutable configuration (read-only)
+Immutable ConfigurationMap `json:"immutable,omitempty"`
 
-	// Immutable configuration (read-only)
-	Immutable ConfigurationMap `json:"immutable,omitempty"`
+  
+    // currently applied changeable configuration
+Realized *EndpointConfigurationSpec `json:"realized,omitempty"`
 
-	// currently applied changeable configuration
-	Realized *EndpointConfigurationSpec `json:"realized,omitempty"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this endpoint configuration status
 func (m *EndpointConfigurationStatus) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateError(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+      if err := m.validateError(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+      if err := m.validateImmutable(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+      if err := m.validateRealized(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  
+  
 
-	if err := m.validateImmutable(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateRealized(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+      
+      
+      
+      
+
+      
 func (m *EndpointConfigurationStatus) validateError(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Error) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Error) { // not required
+    return nil
+  }
+        
+      
+      if err := m.Error.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("error")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("error")
+        }
 
-	if err := m.Error.Validate(formats); err != nil {
-		ve := new(errors.Validation)
-		if stderrors.As(err, &ve) {
-			return ve.ValidateName("error")
-		}
-		ce := new(errors.CompositeError)
-		if stderrors.As(err, &ce) {
-			return ce.ValidateName("error")
-		}
+        return err
+      }
 
-		return err
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+      
+      
+      
+      
 
+      
 func (m *EndpointConfigurationStatus) validateImmutable(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Immutable) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Immutable) { // not required
+    return nil
+  }
+        
+    
+      if m.Immutable != nil {
+      if err := m.Immutable.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("immutable")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("immutable")
+        }
 
-	if m.Immutable != nil {
-		if err := m.Immutable.Validate(formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("immutable")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("immutable")
-			}
+        return err
+      }
+    }
 
-			return err
-		}
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+      
+      
+      
+      
 
+      
 func (m *EndpointConfigurationStatus) validateRealized(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Realized) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Realized) { // not required
+    return nil
+  }
+        
+    
+      if m.Realized != nil {
+      if err := m.Realized.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("realized")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("realized")
+        }
 
-	if m.Realized != nil {
-		if err := m.Realized.Validate(formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("realized")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("realized")
-			}
+        return err
+      }
+    }
 
-			return err
-		}
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+  
 
+  
+
+    
 // ContextValidate validate this endpoint configuration status based on the context it is used
 func (m *EndpointConfigurationStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
+  var res []error
+   
+  
 
-	if err := m.contextValidateError(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
-	if err := m.contextValidateImmutable(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.contextValidateRealized(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+     
+      if err := m.contextValidateError(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+     
+      if err := m.contextValidateImmutable(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+     
+      if err := m.contextValidateRealized(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+
+  
+    
 func (m *EndpointConfigurationStatus) contextValidateError(ctx context.Context, formats strfmt.Registry) error {
+       
+      
+  
+      
+      if typeutils.IsZero(m.Error) { // not required
+        return nil
+      }
+      
+      if err := m.Error.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("error")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("error")
+        }
 
-	if typeutils.IsZero(m.Error) { // not required
-		return nil
-	}
+        return err
+      }
 
-	if err := m.Error.ContextValidate(ctx, formats); err != nil {
-		ve := new(errors.Validation)
-		if stderrors.As(err, &ve) {
-			return ve.ValidateName("error")
-		}
-		ce := new(errors.CompositeError)
-		if stderrors.As(err, &ce) {
-			return ce.ValidateName("error")
-		}
 
-		return err
-	}
 
-	return nil
+  return nil
 }
-
+    
+  
+    
 func (m *EndpointConfigurationStatus) contextValidateImmutable(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+      
+      if typeutils.IsZero(m.Immutable) { // not required
+        return nil
+      }
+      
+      if err := m.Immutable.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("immutable")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("immutable")
+        }
 
-	if typeutils.IsZero(m.Immutable) { // not required
-		return nil
-	}
+        return err
+      }
 
-	if err := m.Immutable.ContextValidate(ctx, formats); err != nil {
-		ve := new(errors.Validation)
-		if stderrors.As(err, &ve) {
-			return ve.ValidateName("immutable")
-		}
-		ce := new(errors.CompositeError)
-		if stderrors.As(err, &ce) {
-			return ce.ValidateName("immutable")
-		}
 
-		return err
-	}
 
-	return nil
+  return nil
 }
-
+    
+  
+    
 func (m *EndpointConfigurationStatus) contextValidateRealized(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+      if m.Realized != nil {
+      
+      if typeutils.IsZero(m.Realized) { // not required
+        return nil
+      }
+      
+      if err := m.Realized.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("realized")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("realized")
+        }
 
-	if m.Realized != nil {
+        return err
+      }
+    }
 
-		if typeutils.IsZero(m.Realized) { // not required
-			return nil
-		}
 
-		if err := m.Realized.ContextValidate(ctx, formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("realized")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("realized")
-			}
 
-			return err
-		}
-	}
-
-	return nil
+  return nil
 }
+    
+   
+   
 
+  
 // MarshalBinary interface implementation
 func (m *EndpointConfigurationStatus) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *EndpointConfigurationStatus) UnmarshalBinary(b []byte) error {
-	var res EndpointConfigurationStatus
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res EndpointConfigurationStatus
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

@@ -6,185 +6,281 @@
 package models
 
 import (
-	"context"
-	stderrors "errors"
-	"strconv"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // FrontendMapping Mapping of frontend to backend pods of an LRP
 //
 // swagger:model FrontendMapping
-type FrontendMapping struct {
+      type FrontendMapping struct {
+  
+  
+    // Pod backends of an LRP
+Backends []*LRPBackend `json:"backends"`
 
-	// Pod backends of an LRP
-	Backends []*LRPBackend `json:"backends"`
+  
+    // frontend address
+FrontendAddress *FrontendAddress `json:"frontend-address,omitempty"`
 
-	// frontend address
-	FrontendAddress *FrontendAddress `json:"frontend-address,omitempty"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this frontend mapping
 func (m *FrontendMapping) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateBackends(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+      if err := m.validateBackends(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+      if err := m.validateFrontendAddress(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  
+  
 
-	if err := m.validateFrontendAddress(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+      
+      
+      
+      
+
+      
 func (m *FrontendMapping) validateBackends(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Backends) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Backends) { // not required
+    return nil
+  }
+        
+    
+  
+  
+  
+  
+  
+  
+  
+      for i := 0; i < len(m.Backends); i++ {
+          if typeutils.IsZero(m.Backends[i]) { // not required
+            continue
+          }
+        
+    
+      if m.Backends[i] != nil {
+      if err := m.Backends[i].Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("backends"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("backends"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.Backends); i++ {
-		if typeutils.IsZero(m.Backends[i]) { // not required
-			continue
-		}
+        return err
+      }
+    }
 
-		if m.Backends[i] != nil {
-			if err := m.Backends[i].Validate(formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("backends" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("backends" + "." + strconv.Itoa(i))
-				}
 
-				return err
-			}
-		}
+      }
 
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+      
+      
+      
+      
 
+      
 func (m *FrontendMapping) validateFrontendAddress(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.FrontendAddress) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.FrontendAddress) { // not required
+    return nil
+  }
+        
+    
+      if m.FrontendAddress != nil {
+      if err := m.FrontendAddress.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("frontend-address")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("frontend-address")
+        }
 
-	if m.FrontendAddress != nil {
-		if err := m.FrontendAddress.Validate(formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("frontend-address")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("frontend-address")
-			}
+        return err
+      }
+    }
 
-			return err
-		}
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+  
 
+  
+
+    
 // ContextValidate validate this frontend mapping based on the context it is used
 func (m *FrontendMapping) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
+  var res []error
+   
+  
 
-	if err := m.contextValidateBackends(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
-	if err := m.contextValidateFrontendAddress(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+     
+      if err := m.contextValidateBackends(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+     
+      if err := m.contextValidateFrontendAddress(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+
+  
+    
 func (m *FrontendMapping) contextValidateBackends(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+  
+      for i := 0; i < len(m.Backends); i++ {
+        
+    
+  
+      if m.Backends[i] != nil {
+      
+      if typeutils.IsZero(m.Backends[i]) { // not required
+        return nil
+      }
+      
+      if err := m.Backends[i].ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("backends"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("backends"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.Backends); i++ {
+        return err
+      }
+    }
 
-		if m.Backends[i] != nil {
 
-			if typeutils.IsZero(m.Backends[i]) { // not required
-				return nil
-			}
 
-			if err := m.Backends[i].ContextValidate(ctx, formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("backends" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("backends" + "." + strconv.Itoa(i))
-				}
+      }
 
-				return err
-			}
-		}
 
-	}
 
-	return nil
+  return nil
 }
-
+    
+  
+    
 func (m *FrontendMapping) contextValidateFrontendAddress(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+      if m.FrontendAddress != nil {
+      
+      if typeutils.IsZero(m.FrontendAddress) { // not required
+        return nil
+      }
+      
+      if err := m.FrontendAddress.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("frontend-address")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("frontend-address")
+        }
 
-	if m.FrontendAddress != nil {
+        return err
+      }
+    }
 
-		if typeutils.IsZero(m.FrontendAddress) { // not required
-			return nil
-		}
 
-		if err := m.FrontendAddress.ContextValidate(ctx, formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("frontend-address")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("frontend-address")
-			}
 
-			return err
-		}
-	}
-
-	return nil
+  return nil
 }
+    
+   
+   
 
+  
 // MarshalBinary interface implementation
 func (m *FrontendMapping) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *FrontendMapping) UnmarshalBinary(b []byte) error {
-	var res FrontendMapping
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res FrontendMapping
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

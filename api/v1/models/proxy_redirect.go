@@ -6,51 +6,67 @@
 package models
 
 import (
-	"context"
+  stderrors "errors"
 
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
+	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // ProxyRedirect Configured proxy redirection state
 //
 // swagger:model ProxyRedirect
-type ProxyRedirect struct {
+      type ProxyRedirect struct {
+  
+  
+    // Name of the proxy redirect
+Name string `json:"name,omitempty"`
 
-	// Name of the proxy redirect
-	Name string `json:"name,omitempty"`
+  
+    // Name of the proxy this redirect points to
+Proxy string `json:"proxy,omitempty"`
 
-	// Name of the proxy this redirect points to
-	Proxy string `json:"proxy,omitempty"`
+  
+    // Host port that this redirect points to
+ProxyPort int64 `json:"proxy-port,omitempty"`
 
-	// Host port that this redirect points to
-	ProxyPort int64 `json:"proxy-port,omitempty"`
+  
+  
 }
-
+  
 // Validate validates this proxy redirect
 func (m *ProxyRedirect) Validate(formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
-// ContextValidate validates this proxy redirect based on context it is used
+// ContextValidate validates this proxy redirect based on context it is used 
 func (m *ProxyRedirect) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
+  
 // MarshalBinary interface implementation
 func (m *ProxyRedirect) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *ProxyRedirect) UnmarshalBinary(b []byte) error {
-	var res ProxyRedirect
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res ProxyRedirect
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

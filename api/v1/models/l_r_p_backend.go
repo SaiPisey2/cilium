@@ -6,117 +6,186 @@
 package models
 
 import (
-	"context"
-	stderrors "errors"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // LRPBackend Pod backend of an LRP
 //
 // swagger:model LRPBackend
-type LRPBackend struct {
+      type LRPBackend struct {
+  
+  
+    // backend address
+BackendAddress *BackendAddress `json:"backend-address,omitempty"`
 
-	// backend address
-	BackendAddress *BackendAddress `json:"backend-address,omitempty"`
+  
+    // Namespace and name of the backend pod
+PodID string `json:"pod-id,omitempty"`
 
-	// Namespace and name of the backend pod
-	PodID string `json:"pod-id,omitempty"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this l r p backend
 func (m *LRPBackend) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateBackendAddress(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+      if err := m.validateBackendAddress(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+  
+  
+  
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+      
+      
+      
+      
+
+      
 func (m *LRPBackend) validateBackendAddress(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.BackendAddress) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.BackendAddress) { // not required
+    return nil
+  }
+        
+    
+      if m.BackendAddress != nil {
+      if err := m.BackendAddress.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("backend-address")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("backend-address")
+        }
 
-	if m.BackendAddress != nil {
-		if err := m.BackendAddress.Validate(formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("backend-address")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("backend-address")
-			}
+        return err
+      }
+    }
 
-			return err
-		}
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+  
+  
 
+  
+
+    
 // ContextValidate validate this l r p backend based on the context it is used
 func (m *LRPBackend) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
+  var res []error
+   
+  
 
-	if err := m.contextValidateBackendAddress(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+     
+      if err := m.contextValidateBackendAddress(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+  
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+
+  
+    
 func (m *LRPBackend) contextValidateBackendAddress(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+      if m.BackendAddress != nil {
+      
+      if typeutils.IsZero(m.BackendAddress) { // not required
+        return nil
+      }
+      
+      if err := m.BackendAddress.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("backend-address")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("backend-address")
+        }
 
-	if m.BackendAddress != nil {
+        return err
+      }
+    }
 
-		if typeutils.IsZero(m.BackendAddress) { // not required
-			return nil
-		}
 
-		if err := m.BackendAddress.ContextValidate(ctx, formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("backend-address")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("backend-address")
-			}
 
-			return err
-		}
-	}
-
-	return nil
+  return nil
 }
+    
+  
+    
+   
+   
 
+  
 // MarshalBinary interface implementation
 func (m *LRPBackend) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *LRPBackend) UnmarshalBinary(b []byte) error {
-	var res LRPBackend
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res LRPBackend
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

@@ -6,87 +6,164 @@
 package models
 
 import (
-	"context"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
 	"github.com/go-openapi/validate"
 )
 
 // WireguardPeer Status of a WireGuard peer
-//
+// 
 // +k8s:deepcopy-gen=true
 //
 // swagger:model WireguardPeer
-type WireguardPeer struct {
+      type WireguardPeer struct {
+  
+  
+    // List of IPs which may be routed through this peer
+AllowedIps []string `json:"allowed-ips"`
 
-	// List of IPs which may be routed through this peer
-	AllowedIps []string `json:"allowed-ips"`
+  
+    // Endpoint on which we are connected to this peer
+Endpoint string `json:"endpoint,omitempty"`
 
-	// Endpoint on which we are connected to this peer
-	Endpoint string `json:"endpoint,omitempty"`
+  
+    // Timestamp of the last handshake with this peer
+// Format: date-time
+LastHandshakeTime strfmt.DateTime `json:"last-handshake-time,omitempty"`
 
-	// Timestamp of the last handshake with this peer
-	// Format: date-time
-	LastHandshakeTime strfmt.DateTime `json:"last-handshake-time,omitempty"`
+  
+    // Public key of this peer
+PublicKey string `json:"public-key,omitempty"`
 
-	// Public key of this peer
-	PublicKey string `json:"public-key,omitempty"`
+  
+    // Number of received bytes
+TransferRx int64 `json:"transfer-rx,omitempty"`
 
-	// Number of received bytes
-	TransferRx int64 `json:"transfer-rx,omitempty"`
+  
+    // Number of sent bytes
+TransferTx int64 `json:"transfer-tx,omitempty"`
 
-	// Number of sent bytes
-	TransferTx int64 `json:"transfer-tx,omitempty"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this wireguard peer
 func (m *WireguardPeer) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateLastHandshakeTime(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+  
+    
+  
+    
+      if err := m.validateLastHandshakeTime(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+  
+    
+  
+    
+  
+  
+  
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+  
+    
+  
+    
+      
+      
+      
+      
+
+      
 func (m *WireguardPeer) validateLastHandshakeTime(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.LastHandshakeTime) { // not required
-		return nil
-	}
-
-	if err := validate.FormatOf("last-handshake-time", "body", "date-time", m.LastHandshakeTime.String(), formats); err != nil {
-		return err
-	}
-
-	return nil
+  if typeutils.IsZero(m.LastHandshakeTime) { // not required
+    return nil
+  }
+        
+      
+  
+  
+  
+  
+  
+  
+  
+  
+  
+    if err := validate.FormatOf("last-handshake-time", "body", "date-time", m.LastHandshakeTime.String(), formats); err != nil {
+  return err
 }
 
-// ContextValidate validates this wireguard peer based on context it is used
+
+
+
+  return nil
+}
+      
+    
+  
+    
+  
+    
+  
+    
+  
+  
+
+  
+
+// ContextValidate validates this wireguard peer based on context it is used 
 func (m *WireguardPeer) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
+  
 // MarshalBinary interface implementation
 func (m *WireguardPeer) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *WireguardPeer) UnmarshalBinary(b []byte) error {
-	var res WireguardPeer
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res WireguardPeer
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

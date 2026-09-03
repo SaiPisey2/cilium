@@ -6,51 +6,67 @@
 package models
 
 import (
-	"context"
+  stderrors "errors"
 
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
+	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // PolicyRule A policy rule including the rule labels it derives from
 //
 // swagger:model PolicyRule
-type PolicyRule struct {
+      type PolicyRule struct {
+  
+  
+    // The policy rule labels identifying the policy rules this rule derives from
+DerivedFromRules [][]string `json:"derived-from-rules"`
 
-	// The policy rule labels identifying the policy rules this rule derives from
-	DerivedFromRules [][]string `json:"derived-from-rules"`
+  
+    // The policy rule as json
+Rule string `json:"rule,omitempty"`
 
-	// The policy rule as json
-	Rule string `json:"rule,omitempty"`
+  
+    // The policy rule labels identifying the policy rules this rule derives from, mapped by selector
+RulesBySelector map[string][][]string `json:"rules-by-selector,omitempty"`
 
-	// The policy rule labels identifying the policy rules this rule derives from, mapped by selector
-	RulesBySelector map[string][][]string `json:"rules-by-selector,omitempty"`
+  
+  
 }
-
+  
 // Validate validates this policy rule
 func (m *PolicyRule) Validate(formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
-// ContextValidate validates this policy rule based on context it is used
+// ContextValidate validates this policy rule based on context it is used 
 func (m *PolicyRule) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
+  
 // MarshalBinary interface implementation
 func (m *PolicyRule) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *PolicyRule) UnmarshalBinary(b []byte) error {
-	var res PolicyRule
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res PolicyRule
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

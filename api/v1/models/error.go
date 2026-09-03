@@ -6,22 +6,33 @@
 package models
 
 import (
-	"context"
+  stderrors "errors"
 
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
+	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // Error error
 //
 // swagger:model Error
-type Error string
-
+    type Error string
+  
 // Validate validates this error
 func (m Error) Validate(formats strfmt.Registry) error {
-	return nil
+  return nil
+}
+// ContextValidate validates this error based on context it is used 
+func (m Error) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
+  return nil
 }
 
-// ContextValidate validates this error based on context it is used
-func (m Error) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
-}
+
+

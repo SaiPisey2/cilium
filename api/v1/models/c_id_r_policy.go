@@ -6,196 +6,306 @@
 package models
 
 import (
-	"context"
-	stderrors "errors"
-	"strconv"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // CIDRPolicy CIDR endpoint policy
 //
 // swagger:model CIDRPolicy
-type CIDRPolicy struct {
+      type CIDRPolicy struct {
+  
+  
+    // List of CIDR egress rules
+Egress []*PolicyRule `json:"egress"`
 
-	// List of CIDR egress rules
-	Egress []*PolicyRule `json:"egress"`
+  
+    // List of CIDR ingress rules
+Ingress []*PolicyRule `json:"ingress"`
 
-	// List of CIDR ingress rules
-	Ingress []*PolicyRule `json:"ingress"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this c ID r policy
 func (m *CIDRPolicy) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateEgress(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+      if err := m.validateEgress(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+      if err := m.validateIngress(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  
+  
 
-	if err := m.validateIngress(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+      
+      
+      
+      
+
+      
 func (m *CIDRPolicy) validateEgress(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Egress) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Egress) { // not required
+    return nil
+  }
+        
+    
+  
+  
+  
+  
+  
+  
+  
+      for i := 0; i < len(m.Egress); i++ {
+          if typeutils.IsZero(m.Egress[i]) { // not required
+            continue
+          }
+        
+    
+      if m.Egress[i] != nil {
+      if err := m.Egress[i].Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("egress"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("egress"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.Egress); i++ {
-		if typeutils.IsZero(m.Egress[i]) { // not required
-			continue
-		}
+        return err
+      }
+    }
 
-		if m.Egress[i] != nil {
-			if err := m.Egress[i].Validate(formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("egress" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("egress" + "." + strconv.Itoa(i))
-				}
 
-				return err
-			}
-		}
+      }
 
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+      
+      
+      
+      
 
+      
 func (m *CIDRPolicy) validateIngress(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Ingress) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Ingress) { // not required
+    return nil
+  }
+        
+    
+  
+  
+  
+  
+  
+  
+  
+      for i := 0; i < len(m.Ingress); i++ {
+          if typeutils.IsZero(m.Ingress[i]) { // not required
+            continue
+          }
+        
+    
+      if m.Ingress[i] != nil {
+      if err := m.Ingress[i].Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("ingress"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("ingress"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.Ingress); i++ {
-		if typeutils.IsZero(m.Ingress[i]) { // not required
-			continue
-		}
+        return err
+      }
+    }
 
-		if m.Ingress[i] != nil {
-			if err := m.Ingress[i].Validate(formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("ingress" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("ingress" + "." + strconv.Itoa(i))
-				}
 
-				return err
-			}
-		}
+      }
 
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+  
 
+  
+
+    
 // ContextValidate validate this c ID r policy based on the context it is used
 func (m *CIDRPolicy) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
+  var res []error
+   
+  
 
-	if err := m.contextValidateEgress(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
-	if err := m.contextValidateIngress(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+     
+      if err := m.contextValidateEgress(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+     
+      if err := m.contextValidateIngress(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+
+  
+    
 func (m *CIDRPolicy) contextValidateEgress(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+  
+      for i := 0; i < len(m.Egress); i++ {
+        
+    
+  
+      if m.Egress[i] != nil {
+      
+      if typeutils.IsZero(m.Egress[i]) { // not required
+        return nil
+      }
+      
+      if err := m.Egress[i].ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("egress"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("egress"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.Egress); i++ {
+        return err
+      }
+    }
 
-		if m.Egress[i] != nil {
 
-			if typeutils.IsZero(m.Egress[i]) { // not required
-				return nil
-			}
 
-			if err := m.Egress[i].ContextValidate(ctx, formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("egress" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("egress" + "." + strconv.Itoa(i))
-				}
+      }
 
-				return err
-			}
-		}
 
-	}
 
-	return nil
+  return nil
 }
-
+    
+  
+    
 func (m *CIDRPolicy) contextValidateIngress(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+  
+      for i := 0; i < len(m.Ingress); i++ {
+        
+    
+  
+      if m.Ingress[i] != nil {
+      
+      if typeutils.IsZero(m.Ingress[i]) { // not required
+        return nil
+      }
+      
+      if err := m.Ingress[i].ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("ingress"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("ingress"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.Ingress); i++ {
+        return err
+      }
+    }
 
-		if m.Ingress[i] != nil {
 
-			if typeutils.IsZero(m.Ingress[i]) { // not required
-				return nil
-			}
 
-			if err := m.Ingress[i].ContextValidate(ctx, formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("ingress" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("ingress" + "." + strconv.Itoa(i))
-				}
+      }
 
-				return err
-			}
-		}
 
-	}
 
-	return nil
+  return nil
 }
+    
+   
+   
 
+  
 // MarshalBinary interface implementation
 func (m *CIDRPolicy) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *CIDRPolicy) UnmarshalBinary(b []byte) error {
-	var res CIDRPolicy
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res CIDRPolicy
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

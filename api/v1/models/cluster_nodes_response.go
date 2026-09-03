@@ -6,129 +6,211 @@
 package models
 
 import (
-	"context"
-	stderrors "errors"
-	"strconv"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // ClusterNodesResponse cluster nodes response
 //
 // swagger:model ClusterNodesResponse
-type ClusterNodesResponse struct {
+      type ClusterNodesResponse struct {
+  
+  
+    // List of known nodes
+Nodes []*NodeElement `json:"nodes"`
 
-	// List of known nodes
-	Nodes []*NodeElement `json:"nodes"`
+  
+    // Name of local node (if available)
+Self string `json:"self,omitempty"`
 
-	// Name of local node (if available)
-	Self string `json:"self,omitempty"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this cluster nodes response
 func (m *ClusterNodesResponse) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateNodes(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+      if err := m.validateNodes(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+  
+  
+  
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+      
+      
+      
+      
+
+      
 func (m *ClusterNodesResponse) validateNodes(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Nodes) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Nodes) { // not required
+    return nil
+  }
+        
+    
+  
+  
+  
+  
+  
+  
+  
+      for i := 0; i < len(m.Nodes); i++ {
+          if typeutils.IsZero(m.Nodes[i]) { // not required
+            continue
+          }
+        
+    
+      if m.Nodes[i] != nil {
+      if err := m.Nodes[i].Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("nodes"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("nodes"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.Nodes); i++ {
-		if typeutils.IsZero(m.Nodes[i]) { // not required
-			continue
-		}
+        return err
+      }
+    }
 
-		if m.Nodes[i] != nil {
-			if err := m.Nodes[i].Validate(formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("nodes" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("nodes" + "." + strconv.Itoa(i))
-				}
 
-				return err
-			}
-		}
+      }
 
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+  
+  
 
+  
+
+    
 // ContextValidate validate this cluster nodes response based on the context it is used
 func (m *ClusterNodesResponse) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
+  var res []error
+   
+  
 
-	if err := m.contextValidateNodes(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+     
+      if err := m.contextValidateNodes(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+  
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+
+  
+    
 func (m *ClusterNodesResponse) contextValidateNodes(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+  
+      for i := 0; i < len(m.Nodes); i++ {
+        
+    
+  
+      if m.Nodes[i] != nil {
+      
+      if typeutils.IsZero(m.Nodes[i]) { // not required
+        return nil
+      }
+      
+      if err := m.Nodes[i].ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("nodes"+ "." + strconv.Itoa(i))
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("nodes"+ "." + strconv.Itoa(i))
+        }
 
-	for i := 0; i < len(m.Nodes); i++ {
+        return err
+      }
+    }
 
-		if m.Nodes[i] != nil {
 
-			if typeutils.IsZero(m.Nodes[i]) { // not required
-				return nil
-			}
 
-			if err := m.Nodes[i].ContextValidate(ctx, formats); err != nil {
-				ve := new(errors.Validation)
-				if stderrors.As(err, &ve) {
-					return ve.ValidateName("nodes" + "." + strconv.Itoa(i))
-				}
-				ce := new(errors.CompositeError)
-				if stderrors.As(err, &ce) {
-					return ce.ValidateName("nodes" + "." + strconv.Itoa(i))
-				}
+      }
 
-				return err
-			}
-		}
 
-	}
 
-	return nil
+  return nil
 }
+    
+  
+    
+   
+   
 
+  
 // MarshalBinary interface implementation
 func (m *ClusterNodesResponse) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *ClusterNodesResponse) UnmarshalBinary(b []byte) error {
-	var res ClusterNodesResponse
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res ClusterNodesResponse
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

@@ -6,51 +6,67 @@
 package models
 
 import (
-	"context"
+  stderrors "errors"
 
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
+	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // Metric Metric information
 //
 // swagger:model Metric
-type Metric struct {
+      type Metric struct {
+  
+  
+    // Labels of the metric
+Labels map[string]string `json:"labels,omitempty"`
 
-	// Labels of the metric
-	Labels map[string]string `json:"labels,omitempty"`
+  
+    // Name of the metric
+Name string `json:"name,omitempty"`
 
-	// Name of the metric
-	Name string `json:"name,omitempty"`
+  
+    // Value of the metric
+Value float64 `json:"value,omitempty"`
 
-	// Value of the metric
-	Value float64 `json:"value,omitempty"`
+  
+  
 }
-
+  
 // Validate validates this metric
 func (m *Metric) Validate(formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
-// ContextValidate validates this metric based on context it is used
+// ContextValidate validates this metric based on context it is used 
 func (m *Metric) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
+  
 // MarshalBinary interface implementation
 func (m *Metric) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *Metric) UnmarshalBinary(b []byte) error {
-	var res Metric
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res Metric
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

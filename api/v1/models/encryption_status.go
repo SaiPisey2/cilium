@@ -6,236 +6,359 @@
 package models
 
 import (
-	"context"
-	"encoding/json"
-	stderrors "errors"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
 	"github.com/go-openapi/swag/typeutils"
 	"github.com/go-openapi/validate"
 )
 
 // EncryptionStatus Status of transparent encryption
-//
+// 
 // +k8s:deepcopy-gen=true
 //
 // swagger:model EncryptionStatus
-type EncryptionStatus struct {
+      type EncryptionStatus struct {
+  
+  
+    // Status of the IPsec agent
+Ipsec *IPsecStatus `json:"ipsec,omitempty"`
 
-	// Status of the IPsec agent
-	Ipsec *IPsecStatus `json:"ipsec,omitempty"`
+  
+    // mode
+// Enum: ["Disabled","IPsec","Wireguard","Ztunnel"]
+Mode string `json:"mode,omitempty"`
 
-	// mode
-	// Enum: ["Disabled","IPsec","Wireguard","Ztunnel"]
-	Mode string `json:"mode,omitempty"`
+  
+    // Human readable error/warning message
+Msg string `json:"msg,omitempty"`
 
-	// Human readable error/warning message
-	Msg string `json:"msg,omitempty"`
+  
+    // Status of the WireGuard agent
+Wireguard *WireguardStatus `json:"wireguard,omitempty"`
 
-	// Status of the WireGuard agent
-	Wireguard *WireguardStatus `json:"wireguard,omitempty"`
+  
+  
 }
-
+  
+    
+  
+  
+  
 // Validate validates this encryption status
 func (m *EncryptionStatus) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
 
-	if err := m.validateIpsec(formats); err != nil {
-		res = append(res, err)
-	}
+  
+    
+      if err := m.validateIpsec(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+      if err := m.validateMode(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+  
+    
+      if err := m.validateWireguard(formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  
+  
 
-	if err := m.validateMode(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if err := m.validateWireguard(formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+  
+    
+      
+      
+      
+      
+
+      
 func (m *EncryptionStatus) validateIpsec(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Ipsec) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Ipsec) { // not required
+    return nil
+  }
+        
+    
+      if m.Ipsec != nil {
+      if err := m.Ipsec.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("ipsec")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("ipsec")
+        }
 
-	if m.Ipsec != nil {
-		if err := m.Ipsec.Validate(formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("ipsec")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("ipsec")
-			}
+        return err
+      }
+    }
 
-			return err
-		}
-	}
 
-	return nil
+
+  return nil
 }
-
+      
+    
+  
+    
+      
 var encryptionStatusTypeModePropEnum []any
 
 func init() {
-	var res []string
-	if err := json.Unmarshal([]byte(`["Disabled","IPsec","Wireguard","Ztunnel"]`), &res); err != nil {
-		panic(err)
-	}
-	for _, v := range res {
-		encryptionStatusTypeModePropEnum = append(encryptionStatusTypeModePropEnum, v)
-	}
+  var res []string
+  if err := json.Unmarshal([]byte(`["Disabled","IPsec","Wireguard","Ztunnel"]`), &res); err != nil {
+    panic(err)
+  }
+  for _, v := range res {
+    encryptionStatusTypeModePropEnum = append(encryptionStatusTypeModePropEnum, v)
+  }
 }
 
+        
+          
+          
 const (
-
-	// EncryptionStatusModeDisabled captures enum value "Disabled"
+          
+  // EncryptionStatusModeDisabled captures enum value "Disabled"
 	EncryptionStatusModeDisabled string = "Disabled"
-
-	// EncryptionStatusModeIPsec captures enum value "IPsec"
+          
+  // EncryptionStatusModeIPsec captures enum value "IPsec"
 	EncryptionStatusModeIPsec string = "IPsec"
-
-	// EncryptionStatusModeWireguard captures enum value "Wireguard"
+          
+  // EncryptionStatusModeWireguard captures enum value "Wireguard"
 	EncryptionStatusModeWireguard string = "Wireguard"
-
-	// EncryptionStatusModeZtunnel captures enum value "Ztunnel"
+          
+  // EncryptionStatusModeZtunnel captures enum value "Ztunnel"
 	EncryptionStatusModeZtunnel string = "Ztunnel"
+          
 )
+        
 
 // prop value enum
 func (m *EncryptionStatus) validateModeEnum(path, location string, value string) error {
-	if err := validate.EnumCase(path, location, value, encryptionStatusTypeModePropEnum, true); err != nil {
-		return err
-	}
-	return nil
+  if err := validate.EnumCase(path, location, value, encryptionStatusTypeModePropEnum, true); err != nil {
+    return err
+  }
+  return nil
 }
+      
+      
+      
+      
 
+      
 func (m *EncryptionStatus) validateMode(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Mode) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Mode) { // not required
+    return nil
+  }
+        
+      
+  
+  
+  
+  
+  
+  
+  
+  
+  // value enum
+  if err := m.validateModeEnum("mode", "body", m.Mode); err != nil {
+    return err
+  }
+  
 
-	// value enum
-	if err := m.validateModeEnum("mode", "body", m.Mode); err != nil {
-		return err
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+    
+  
+    
+      
+      
+      
+      
 
+      
 func (m *EncryptionStatus) validateWireguard(formats strfmt.Registry) error {
-	if typeutils.IsZero(m.Wireguard) { // not required
-		return nil
-	}
+  if typeutils.IsZero(m.Wireguard) { // not required
+    return nil
+  }
+        
+    
+      if m.Wireguard != nil {
+      if err := m.Wireguard.Validate(formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("wireguard")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("wireguard")
+        }
 
-	if m.Wireguard != nil {
-		if err := m.Wireguard.Validate(formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("wireguard")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("wireguard")
-			}
+        return err
+      }
+    }
 
-			return err
-		}
-	}
 
-	return nil
+
+  return nil
 }
+      
+    
+  
+  
 
+  
+
+    
 // ContextValidate validate this encryption status based on the context it is used
 func (m *EncryptionStatus) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	var res []error
+  var res []error
+   
+  
 
-	if err := m.contextValidateIpsec(ctx, formats); err != nil {
-		res = append(res, err)
-	}
 
-	if err := m.contextValidateWireguard(ctx, formats); err != nil {
-		res = append(res, err)
-	}
-
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+     
+      if err := m.contextValidateIpsec(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+    
+  
+    
+  
+     
+      if err := m.contextValidateWireguard(ctx, formats); err != nil {
+        res = append(res, err)
+      }
+    
+  
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
+
+  
+    
 func (m *EncryptionStatus) contextValidateIpsec(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+      if m.Ipsec != nil {
+      
+      if typeutils.IsZero(m.Ipsec) { // not required
+        return nil
+      }
+      
+      if err := m.Ipsec.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("ipsec")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("ipsec")
+        }
 
-	if m.Ipsec != nil {
+        return err
+      }
+    }
 
-		if typeutils.IsZero(m.Ipsec) { // not required
-			return nil
-		}
 
-		if err := m.Ipsec.ContextValidate(ctx, formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("ipsec")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("ipsec")
-			}
 
-			return err
-		}
-	}
-
-	return nil
+  return nil
 }
-
+    
+  
+    
+  
+    
+  
+    
 func (m *EncryptionStatus) contextValidateWireguard(ctx context.Context, formats strfmt.Registry) error {
+       
+    
+  
+      if m.Wireguard != nil {
+      
+      if typeutils.IsZero(m.Wireguard) { // not required
+        return nil
+      }
+      
+      if err := m.Wireguard.ContextValidate(ctx, formats); err != nil {
+        ve := new(errors.Validation)
+        if stderrors.As(err, &ve) {
+          return ve.ValidateName("wireguard")
+        }
+        ce := new(errors.CompositeError)
+        if stderrors.As(err, &ce) {
+          return ce.ValidateName("wireguard")
+        }
 
-	if m.Wireguard != nil {
+        return err
+      }
+    }
 
-		if typeutils.IsZero(m.Wireguard) { // not required
-			return nil
-		}
 
-		if err := m.Wireguard.ContextValidate(ctx, formats); err != nil {
-			ve := new(errors.Validation)
-			if stderrors.As(err, &ve) {
-				return ve.ValidateName("wireguard")
-			}
-			ce := new(errors.CompositeError)
-			if stderrors.As(err, &ce) {
-				return ce.ValidateName("wireguard")
-			}
 
-			return err
-		}
-	}
-
-	return nil
+  return nil
 }
+    
+   
+   
 
+  
 // MarshalBinary interface implementation
 func (m *EncryptionStatus) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *EncryptionStatus) UnmarshalBinary(b []byte) error {
-	var res EncryptionStatus
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res EncryptionStatus
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

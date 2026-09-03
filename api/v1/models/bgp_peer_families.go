@@ -6,57 +6,75 @@
 package models
 
 import (
-	"context"
+  stderrors "errors"
 
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
 	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
+	"github.com/go-openapi/swag/typeutils"
+	"github.com/go-openapi/validate"
 )
 
 // BgpPeerFamilies BGP AFI SAFI state of the peer
 //
 // swagger:model BgpPeerFamilies
-type BgpPeerFamilies struct {
+      type BgpPeerFamilies struct {
+  
+  
+    // Number of routes accepted from the peer of this address family
+Accepted int64 `json:"accepted,omitempty"`
 
-	// Number of routes accepted from the peer of this address family
-	Accepted int64 `json:"accepted,omitempty"`
+  
+    // Number of routes advertised of this address family to the peer
+Advertised int64 `json:"advertised,omitempty"`
 
-	// Number of routes advertised of this address family to the peer
-	Advertised int64 `json:"advertised,omitempty"`
+  
+    // BGP address family indicator
+Afi string `json:"afi,omitempty"`
 
-	// BGP address family indicator
-	Afi string `json:"afi,omitempty"`
+  
+    // Number of routes received from the peer of this address family
+Received int64 `json:"received,omitempty"`
 
-	// Number of routes received from the peer of this address family
-	Received int64 `json:"received,omitempty"`
+  
+    // BGP subsequent address family indicator
+Safi string `json:"safi,omitempty"`
 
-	// BGP subsequent address family indicator
-	Safi string `json:"safi,omitempty"`
+  
+  
 }
-
+  
 // Validate validates this bgp peer families
 func (m *BgpPeerFamilies) Validate(formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
-// ContextValidate validates this bgp peer families based on context it is used
+// ContextValidate validates this bgp peer families based on context it is used 
 func (m *BgpPeerFamilies) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
-
+  
 // MarshalBinary interface implementation
 func (m *BgpPeerFamilies) MarshalBinary() ([]byte, error) {
-	if m == nil {
-		return nil, nil
-	}
-	return jsonutils.WriteJSON(m)
+  if m == nil {
+    return nil, nil
+  }
+  return jsonutils.WriteJSON(m)
 }
 
 // UnmarshalBinary interface implementation
 func (m *BgpPeerFamilies) UnmarshalBinary(b []byte) error {
-	var res BgpPeerFamilies
-	if err := jsonutils.ReadJSON(b, &res); err != nil {
-		return err
-	}
-	*m = res
-	return nil
+  var res BgpPeerFamilies
+  if err := jsonutils.ReadJSON(b, &res); err != nil {
+    return err
+  }
+  *m = res
+  return nil
 }
+
+
+

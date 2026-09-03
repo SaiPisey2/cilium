@@ -6,79 +6,117 @@
 package models
 
 import (
-	"context"
-	"encoding/json"
+  stderrors "errors"
 
-	"github.com/go-openapi/errors"
+  "github.com/go-openapi/strfmt"
+  	"github.com/go-openapi/errors"
+	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/strfmt"
+	"github.com/go-openapi/swag/conv"
+	"github.com/go-openapi/swag/jsonutils"
+	"github.com/go-openapi/swag/netutils"
+	"github.com/go-openapi/swag/stringutils"
+	"github.com/go-openapi/swag/typeutils"
 	"github.com/go-openapi/validate"
 )
 
 // ConfiguredDatapathMode Configured datapath mode
 //
 // swagger:model ConfiguredDatapathMode
-type ConfiguredDatapathMode string
+    type ConfiguredDatapathMode string
+  
 
 func NewConfiguredDatapathMode(value ConfiguredDatapathMode) *ConfiguredDatapathMode {
-	return &value
+  return &value
 }
 
 // Pointer returns a pointer to a freshly-allocated ConfiguredDatapathMode.
 func (m ConfiguredDatapathMode) Pointer() *ConfiguredDatapathMode {
-	return &m
+  return &m
 }
-
+    
+  
+    
+      
 const (
-
-	// ConfiguredDatapathModeAuto captures enum value "auto"
+      
+  // ConfiguredDatapathModeAuto captures enum value "auto"
 	ConfiguredDatapathModeAuto ConfiguredDatapathMode = "auto"
-
-	// ConfiguredDatapathModeVeth captures enum value "veth"
+      
+  // ConfiguredDatapathModeVeth captures enum value "veth"
 	ConfiguredDatapathModeVeth ConfiguredDatapathMode = "veth"
-
-	// ConfiguredDatapathModeNetkit captures enum value "netkit"
+      
+  // ConfiguredDatapathModeNetkit captures enum value "netkit"
 	ConfiguredDatapathModeNetkit ConfiguredDatapathMode = "netkit"
-
-	// ConfiguredDatapathModeNetkitDashL2 captures enum value "netkit-l2"
+      
+  // ConfiguredDatapathModeNetkitDashL2 captures enum value "netkit-l2"
 	ConfiguredDatapathModeNetkitDashL2 ConfiguredDatapathMode = "netkit-l2"
+      
 )
+    
 
 // for schema
 var configuredDatapathModeEnum []any
-
 func init() {
-	var res []ConfiguredDatapathMode
-	if err := json.Unmarshal([]byte(`["auto","veth","netkit","netkit-l2"]`), &res); err != nil {
-		panic(err)
-	}
-	for _, v := range res {
-		configuredDatapathModeEnum = append(configuredDatapathModeEnum, v)
-	}
+  var res []ConfiguredDatapathMode
+  if err := json.Unmarshal([]byte(`["auto","veth","netkit","netkit-l2"]`), &res); err != nil {
+    panic(err)
+  }
+  for _, v := range res {
+    configuredDatapathModeEnum = append(configuredDatapathModeEnum, v)
+  }
 }
 
 func (m ConfiguredDatapathMode) validateConfiguredDatapathModeEnum(path, location string, value ConfiguredDatapathMode) error {
-	if err := validate.EnumCase(path, location, value, configuredDatapathModeEnum, true); err != nil {
-		return err
-	}
-	return nil
+  if err := validate.EnumCase(path, location, value, configuredDatapathModeEnum, true); err != nil {
+    return err
+  }
+  return nil
 }
-
+  
+  
+  
 // Validate validates this configured datapath mode
 func (m ConfiguredDatapathMode) Validate(formats strfmt.Registry) error {
-	var res []error
+  var res []error
+  
+  
+  
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  // value enum
+  if err := m.validateConfiguredDatapathModeEnum("", "body", m); err != nil {
+    return err
+  }
+  
 
-	// value enum
-	if err := m.validateConfiguredDatapathModeEnum("", "body", m); err != nil {
-		return err
-	}
 
-	if len(res) > 0 {
-		return errors.CompositeValidationError(res...)
-	}
-	return nil
+  
+  
+  
+
+  if len(res) > 0 {
+    return errors.CompositeValidationError(res...)
+  }
+  return nil
 }
 
-// ContextValidate validates this configured datapath mode based on context it is used
+  
+  
+
+  
+
+// ContextValidate validates this configured datapath mode based on context it is used 
 func (m ConfiguredDatapathMode) ContextValidate(ctx context.Context, formats strfmt.Registry) error {
-	return nil
+  return nil
 }
+
+
+
