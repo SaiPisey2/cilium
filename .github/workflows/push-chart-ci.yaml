@@ -146,7 +146,7 @@ jobs:
         echo "json=${merged_changes}" >> "${GITHUB_OUTPUT}"
 
     - name: Push charts
-      uses: cilium/reusable-workflows/.github/actions/push-helm-chart@6ae27958f2f37545bf48e44106b73df05b1f6d12 # v0.1.0
+      uses: cilium/reusable-workflows/.github/actions/push-helm-chart@0a992e5cf43e338b0a6f72d69db481b4ca6d3f63
       with:
         name: cilium
         path: install/kubernetes/cilium
