@@ -2,6 +2,7 @@ name: Image CI Build
 
 # Any change in triggers needs to be reflected in the concurrency group.
 on:
+  pull_request: {}
   pull_request_target:
     types:
       - opened
@@ -458,7 +459,7 @@ jobs:
       contents: read
       pull-requests: read
       statuses: write
-    uses: ./.github/workflows/push-chart-ci.yaml
+    uses: cilium/cilium/.github/workflows/push-chart-ci.yaml@a501a38fc0594aa854b03be11108f3c741c534bf # pr/joe/test-zizmor-lint-fixes
     with:
       checkout_ref: ${{ needs.build-and-push-prs.outputs.sha }}
       image_tag: ${{ needs.build-and-push-prs.outputs.sha }}
